@@ -2,6 +2,7 @@ const axios = require('axios');
 const { toZonedTime } = require('date-fns-tz');
 const { getDay, getHours } = require('date-fns');
 const { JAM_OPERASIONAL, PESAN_BOT } = require('../config/constants');
+const { generateAiResponse } = require('./ai.service');
 
 const GRAPH_API_URL = 'https://graph.facebook.com/v21.0';
 
@@ -22,10 +23,23 @@ function isOperationalHours() {
 }
 
 /**
- * Dapatkan pesan auto-reply berdasarkan jam operasional
- * @returns {string}
+ * Dapatkan pesan auto-reply cerdas berbasis Bot AI + Jam Operasional
+ * @param {string} incomingText - Pesan masuk dari warga
+ * @returns {Promise<string>}
  */
-function getAutoReplyMessage() {
+async function getAutoReplyMessage(incomingText) {
+  // Jika warga menanyakan informasi spesifik (misal syarat SKTM, domisili, kematian, jam buka),
+  // minta bantuan AI Engine untuk memberikan jawaban akurat!
+  if (incomingText && incomingText.trim().length > 3) {
+    const aiAnswer = await generateAiResponse(incomingText);
+    const timeStatusNote = isOperationalHours()
+      ? '\n\n---\n*Status Kantor:* 🟢 Jam Operasional (08:00 - 15:00 WIB). Admin kami akan merespons percakapan Anda.'
+      : '\n\n---\n*Status Kantor:* 🔴 Luar Jam Operasional. Pesan Anda akan ditindaklanjuti oleh petugas pada hari kerja berikutnya mulai 08:00 WIB.';
+    
+    return aiAnswer + timeStatusNote;
+  }
+
+  // Default time-based reply
   return isOperationalHours()
     ? PESAN_BOT.DALAM_JAM_OPERASIONAL
     : PESAN_BOT.LUAR_JAM_OPERASIONAL;

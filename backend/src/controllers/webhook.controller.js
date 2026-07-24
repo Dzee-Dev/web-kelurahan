@@ -38,8 +38,8 @@ async function handleIncomingMessage(req, res) {
 
     console.log(`📩 Pesan masuk dari ${messageData.from}: "${messageData.messageBody}"`);
 
-    // Kirim auto-reply berdasarkan jam operasional
-    const replyMessage = whatsappService.getAutoReplyMessage();
+    // Kirim auto-reply cerdas berbasis AI + jam operasional
+    const replyMessage = await whatsappService.getAutoReplyMessage(messageData.messageBody);
     await whatsappService.sendTextMessage(messageData.from, replyMessage);
 
     console.log(`📤 Auto-reply terkirim ke ${messageData.from}`);

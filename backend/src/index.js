@@ -7,6 +7,7 @@ const morgan = require('morgan');
 
 const pengajuanRoutes = require('./routes/pengajuan.routes');
 const webhookRoutes = require('./routes/webhook.routes');
+const chatRoutes = require('./routes/chat.routes');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 
 const app = express();
@@ -45,6 +46,7 @@ app.get('/health', (req, res) => {
 
 // ─── Routes ──────────────────────────────────────────────────
 app.use('/api/pengajuan', pengajuanRoutes);
+app.use('/api/chat', chatRoutes);
 app.use('/webhook', webhookRoutes);
 
 // ─── Error Handling ──────────────────────────────────────────
