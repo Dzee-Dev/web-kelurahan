@@ -1,0 +1,27 @@
+{
+  "name": "web-kelurahan-backend",
+  "version": "1.0.0",
+  "description": "Backend API untuk Sistem Pelaporan Web Kelurahan",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.0",
+    "axios": "^1.7.0",
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
+    "dotenv": "^16.4.0",
+    "express": "^4.21.0",
+    "helmet": "^8.0.0",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^11.0.0",
+    "ws": "^8.21.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
