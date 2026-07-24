@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { CheckCircle2, MessageCircle, Copy, ArrowRight, ExternalLink } from 'lucide-react';
+import { CheckCircle2, MessageCircle, Copy, FileText, Download, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 
 export default function SuccessModal({ data, onClose }) {
@@ -36,7 +36,7 @@ export default function SuccessModal({ data, onClose }) {
           </div>
           <h3 className="text-2xl font-bold text-white tracking-tight">Pengajuan Berhasil Disubmit!</h3>
           <p className="text-sm text-slate-300">
-            Data Anda telah tersimpan di sistem kelurahan. Langkah berikutnya adalah mengirimkan rekap ke WhatsApp Admin.
+            Data Anda & Dokumen Bukti Pengajuan PDF telah otomatis diterbitkan oleh sistem kelurahan.
           </p>
         </div>
 
@@ -52,13 +52,24 @@ export default function SuccessModal({ data, onClose }) {
               <Copy className="w-3.5 h-3.5" /> Salin
             </button>
           </div>
-          <p className="text-[11px] text-slate-500">
-            *Simpan kode ini untuk mengecek status pengajuan surat Anda kapan saja.
-          </p>
         </div>
 
+        {/* PDF Download Button (If available) */}
+        {data.pdf_url && (
+          <a
+            href={data.pdf_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="glass-card w-full py-3 px-4 rounded-2xl text-emerald-400 font-semibold text-sm border border-emerald-500/30 hover:bg-emerald-500/10 flex items-center justify-center gap-2 transition-all"
+          >
+            <FileText className="w-4 h-4 text-emerald-400" />
+            <span>Unduh / Cetak Bukti PDF Tanda Terima</span>
+            <Download className="w-4 h-4" />
+          </a>
+        )}
+
         {/* Primary Action: WA Deep Link */}
-        <div className="space-y-3 pt-2">
+        <div className="space-y-3 pt-1">
           <a
             href={data.wa_deep_link}
             target="_blank"
@@ -66,7 +77,7 @@ export default function SuccessModal({ data, onClose }) {
             className="gradient-btn-wa w-full py-4 px-6 rounded-2xl text-white font-bold text-base flex items-center justify-center gap-3 shadow-xl shadow-emerald-500/20 group"
           >
             <MessageCircle className="w-6 h-6 fill-current" />
-            <span>Kirim Rekap ke WA Admin</span>
+            <span>Kirim Rekap & PDF ke WA Admin</span>
             <ExternalLink className="w-4 h-4 opacity-80 group-hover:translate-x-0.5 transition-transform" />
           </a>
 

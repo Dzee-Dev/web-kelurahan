@@ -10,9 +10,9 @@ import {
   AlertCircle,
   FileText,
   Loader2,
-  Calendar,
   User,
-  ShieldCheck,
+  Download,
+  ExternalLink,
   XCircle,
 } from 'lucide-react';
 
@@ -137,6 +137,31 @@ function TrackingContent() {
             </div>
           </div>
 
+          {/* PDF Download Button (If available) */}
+          {data.pdf_url && (
+            <div className="glass-card p-4 rounded-2xl border border-emerald-500/30 bg-emerald-950/10 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+                  <FileText className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-white">Bukti Pengajuan PDF Diterbitkan</h4>
+                  <p className="text-[11px] text-slate-400">Unduh dokumen resmi bukti pendaftaran Anda</p>
+                </div>
+              </div>
+
+              <a
+                href={data.pdf_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="gradient-btn px-4 py-2.5 rounded-xl text-white font-semibold text-xs flex items-center gap-1.5 shrink-0 shadow-md"
+              >
+                <span>Unduh PDF</span>
+                <Download className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          )}
+
           {/* Status Timeline */}
           <div className="space-y-6">
             <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider">Progres Verifikasi Berkas</h3>
@@ -146,7 +171,7 @@ function TrackingContent() {
               {/* Step 1: Submit */}
               <div className="relative">
                 <span className="absolute -left-[23px] top-0 w-4 h-4 rounded-full bg-emerald-500 border-4 border-slate-900" />
-                <h4 className="text-sm font-bold text-white">Form Pengajuan Diterima</h4>
+                <h4 className="text-sm font-bold text-white">Form Pengajuan & PDF Bukti Diterbitkan</h4>
                 <p className="text-xs text-slate-400 mt-0.5">
                   Diajukan pada: {new Date(data.created_at).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })} WIB
                 </p>

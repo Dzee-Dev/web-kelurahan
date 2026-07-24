@@ -47,7 +47,6 @@ async function uploadMultipleFiles(files, baseFolder) {
   const results = {};
 
   for (const [fieldName, fileArray] of Object.entries(files)) {
-    // Setiap field bisa punya 1 file
     const file = fileArray[0];
     if (file) {
       results[fieldName] = await uploadFile(file, baseFolder);
@@ -57,4 +56,30 @@ async function uploadMultipleFiles(files, baseFolder) {
   return results;
 }
 
-module.exports = { uploadFile, uploadMultipleFiles };
+/**
+ * Upload Buffer PDF buatan backend ke Supabase Storage
+ * @param {Buffer} pdfBuffer - Buffer PDF
+ * @param {string} filePath - Target path di bucket
+ * @returns {Promise<string>} - Public URL file PDF
+ */
+async function uploadPdfBuffer(pdfBuffer, filePath) {
+  const { data, error } = await supabase.storage
+    .from(UPLOAD_CONFIG.BUCKET_NAME)
+    .upload(filePath, pdfBuffer, {
+      contentType: 'application/pdf',
+      upsert: true,
+    });
+
+  if (error) {
+    console.error('❌ Gagal upload PDF ke storage:', error.message);
+    return null;
+  }
+
+  const { data: urlData } = supabase.storage
+    .from(UPLOAD_CONFIG.BUCKET_NAME)
+    .getPublicUrl(data.path);
+
+  return urlData.publicUrl;
+}
+
+module.exports = { uploadFile, uploadMultipleFiles, uploadPdfBuffer };
