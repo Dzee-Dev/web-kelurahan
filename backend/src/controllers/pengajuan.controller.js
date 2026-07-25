@@ -117,4 +117,30 @@ async function getStatus(req, res, next) {
   }
 }
 
-module.exports = { submitPengajuan, getStatus };
+/**
+ * PATCH /api/pengajuan/:id/status
+ * Update status pengajuan (admin operation: pending | processed | completed | rejected)
+ */
+async function updateStatusHandler(req, res, next) {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const validStatuses = ['pending', 'processed', 'completed', 'rejected'];
+    if (!status || !validStatuses.includes(status)) {
+      throw new AppError(`Status tidak valid. Pilihan: ${validStatuses.join(', ')}`, 400);
+    }
+
+    const updated = await pengajuanService.updateStatus(id, status);
+
+    res.json({
+      success: true,
+      message: `Status pengajuan berhasil diubah menjadi "${status}"`,
+      data: updated,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { submitPengajuan, getStatus, updateStatusHandler };

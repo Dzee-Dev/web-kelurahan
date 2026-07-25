@@ -37,4 +37,10 @@ router.post('/', uploadFields, validatePengajuan, pengajuanController.submitPeng
  */
 router.get('/:id', pengajuanController.getStatus);
 
+/**
+ * PATCH /api/pengajuan/:id/status
+ * Update status pengajuan (admin)
+ */
+router.patch('/:id/status', pengajuanController.updateStatusHandler);
+
 module.exports = router;
