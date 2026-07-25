@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -25,7 +25,7 @@ export async function submitPengajuan(formData) {
  * @param {string} id
  */
 export async function getPengajuanStatus(id) {
-  const response = await api.get(`/api/pengajuan/${encodeURIComponent(id)}`);
+  const response = await api.get(`/api/pengajuan?id=${encodeURIComponent(id)}`);
   return response.data;
 }
 
