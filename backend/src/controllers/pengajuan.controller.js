@@ -66,7 +66,7 @@ async function submitPengajuan(req, res, next) {
 
     // 4. Generate pesan WA dan deep link (termasuk link PDF)
     const waMessage = buildWaMessage(pengajuan);
-    const adminPhone = process.env.WABA_ADMIN_PHONE || '6281234567890';
+    const adminPhone = process.env.WABA_ADMIN_PHONE || '6285694083400';
     const waDeepLink = buildWaDeepLink(adminPhone, waMessage);
 
     // 5. Response
