@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: web-kelurahan-backend
+    env: node
+    region: singapore
+    plan: free
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
+      - key: SUPABASE_URL
+        value: https://kbavvaxsevcztyvzsqbk.supabase.co
+      - key: WABA_VERIFY_TOKEN
+        value: rahasia_kelurahan_123
+      - key: WABA_PHONE_NUMBER_ID
+        value: 1170659459470823
+      - key: WABA_ADMIN_PHONE
+        value: 6285694083400
