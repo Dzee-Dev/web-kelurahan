@@ -10,11 +10,15 @@ import {
   Search,
   ArrowRight,
   ShieldCheck,
-  Zap,
   CheckCircle2,
   Clock,
   MessageCircle,
-  Sparkles,
+  Building2,
+  AlertCircle,
+  FileCheck,
+  Download,
+  HelpCircle,
+  ChevronRight,
 } from 'lucide-react';
 
 export default function LandingPage() {
@@ -31,197 +35,213 @@ export default function LandingPage() {
     {
       id: 'sktm',
       title: 'Surat Keterangan Tidak Mampu (SKTM)',
-      desc: 'Untuk pengajuan beasiswa sekolah/kuliah, bantuan sosial, atau keringanan biaya pengobatan Rumah Sakit.',
+      desc: 'Untuk pengajuan beasiswa pendidikan, keringanan biaya rawat inap Rumah Sakit, atau permohonan bantuan sosial.',
       icon: FileText,
-      color: 'from-emerald-500 to-teal-600',
-      badge: 'Populer',
+      badge: 'Paling Sering Diajukan',
+      badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+      iconBg: 'bg-emerald-100 text-emerald-700',
+      btnColor: 'bg-emerald-700 hover:bg-emerald-800 text-white',
       requirements: ['Surat Pengantar RT/RW', 'KTP Pemohon', 'Kartu Keluarga (KK)'],
     },
     {
       id: 'domisili',
       title: 'Surat Keterangan Domisili',
-      desc: 'Untuk pendaftaran sekolah, syarat perbankan, melamar pekerjaan, atau legalitas tempat tinggal sementara.',
+      desc: 'Persyaratan pendataan tempat tinggal sementara, pendaftaran sekolah anak, melamar pekerjaan, atau pembukaan rekening bank.',
       icon: Home,
-      color: 'from-blue-500 to-indigo-600',
-      badge: 'Wajib Domisili',
+      badge: 'Layanan Tinggal',
+      badgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
+      iconBg: 'bg-blue-100 text-blue-700',
+      btnColor: 'bg-blue-900 hover:bg-blue-800 text-white',
       requirements: ['Surat Pengantar RT/RW', 'KTP Pemohon', 'Kartu Keluarga (KK)'],
     },
     {
       id: 'kematian',
       title: 'Surat Keterangan Kematian',
-      desc: 'Untuk pengurusan akta kematian, klaim asuransi/BPJS, perbankan, atau penetapan ahli waris.',
+      desc: 'Untuk pembuatan Akta Kematian di Dukcapil, klaim BPJS/Asuransi, penetapan ahli waris, atau perbankan almarhum.',
       icon: UserCheck,
-      color: 'from-rose-500 to-amber-600',
       badge: 'Layanan Dukcapil',
+      badgeColor: 'bg-amber-100 text-amber-800 border-amber-200',
+      iconBg: 'bg-amber-100 text-amber-700',
+      btnColor: 'bg-slate-900 hover:bg-slate-800 text-white',
       requirements: ['Pengantar RT/RW', 'KTP Pemohon', 'KTP & KK Almarhum', 'Surat Kematian RS', 'KTP 2 Saksi'],
     },
   ];
 
   return (
-    <div className="space-y-24 pb-16">
+    <div className="space-y-16 pb-16">
       
-      {/* ─── HERO SECTION ────────────────────────────────────────────── */}
-      <section className="relative pt-12 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
-        
-        {/* Glow backdrop decorative elements */}
-        <div className="absolute top-10 left-1/2 -translate-x-1/2 w-96 h-96 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-40 right-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative text-center space-y-8 max-w-4xl mx-auto">
+      {/* ─── HERO SECTION (SPLIT NATURAL LAYOUT) ────────────────────── */}
+      <section className="bg-gradient-to-b from-blue-50/70 via-slate-50 to-slate-100/50 border-b border-slate-200/80 pt-10 pb-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border border-emerald-500/30 text-emerald-400 text-xs font-semibold shadow-lg shadow-emerald-500/10">
-            <Zap className="w-4 h-4 text-emerald-400 fill-current animate-pulse" />
-            <span>Pelayanan Mandiri 3 Kategori Surat Kelurahan Online</span>
+          {/* Left Hero Column */}
+          <div className="lg:col-span-7 space-y-6">
+            
+            {/* Top Alert Pill */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100/80 border border-blue-200 text-blue-900 text-xs font-semibold">
+              <Building2 className="w-4 h-4 text-blue-700" />
+              <span>Pelayanan Mandiri Kelurahan Online 24 Jam</span>
+            </div>
+
+            {/* Main Headline */}
+            <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+              Pelayanan Surat Kelurahan <br />
+              <span className="text-blue-900">Mudah, Bebas Antre & Resmi</span>
+            </h1>
+
+            {/* Paragraph */}
+            <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl">
+              Warga kelurahan dapat mengajukan **Surat Keterangan Tidak Mampu (SKTM)**, **Surat Domisili**, dan **Surat Kematian** secara mandiri. Cukup isi formulir online, upload berkas, dan terima konfirmasi resmi via WhatsApp Admin.
+            </p>
+
+            {/* Fast Tracking Bar */}
+            <div className="natural-card p-4 border border-slate-300 bg-white space-y-2 shadow-sm max-w-xl">
+              <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                <Search className="w-4 h-4 text-blue-700" /> Cek Status Pengajuan Yang Pernah Dibuat
+              </label>
+              <form onSubmit={handleSearchTracking} className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="Masukkan Kode Tracking UUID pengajuan..."
+                  value={trackingInput}
+                  onChange={(e) => setTrackingInput(e.target.value)}
+                  className="natural-input flex-grow px-3.5 py-2 text-xs font-mono"
+                  required
+                />
+                <button type="submit" className="btn-emerald px-4 py-2 text-xs font-bold shrink-0 flex items-center gap-1">
+                  <span>Lacak</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </form>
+            </div>
+
+            {/* Trust Badges */}
+            <div className="pt-2 flex flex-wrap items-center gap-6 text-xs font-semibold text-slate-600">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span>Gratis Tanpa Pungli</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FileCheck className="w-4 h-4 text-blue-600" />
+                <span>Diterbitkan PDF Bukti Resmi</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <MessageCircle className="w-4 h-4 text-emerald-600" />
+                <span>WhatsApp Official WABA</span>
+              </div>
+            </div>
+
           </div>
 
-          {/* Heading */}
-          <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight">
-            Pengajuan Surat Kelurahan <br />
-            <span className="gradient-text">SKTM, Domisili, & Kematian Online</span>
-          </h1>
-
-          {/* Subtitle */}
-          <p className="text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            Isi form data diri secara mandiri, unggah berkasnya, dan dapatkan respon terintegrasi langsung via Official WhatsApp Admin Kelurahan.
-          </p>
-
-          {/* Quick Category Buttons in Hero */}
-          <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
-            <Link
-              href="/pengajuan/sktm"
-              className="glass-card px-5 py-3 rounded-2xl text-emerald-400 font-bold text-sm border border-emerald-500/30 hover:bg-emerald-500/10 flex items-center gap-2"
-            >
-              <FileText className="w-4 h-4" /> 📄 1. SKTM
-            </Link>
-            <Link
-              href="/pengajuan/domisili"
-              className="glass-card px-5 py-3 rounded-2xl text-blue-400 font-bold text-sm border border-blue-500/30 hover:bg-blue-500/10 flex items-center gap-2"
-            >
-              <Home className="w-4 h-4" /> 🏠 2. Surat Domisili
-            </Link>
-            <Link
-              href="/pengajuan/kematian"
-              className="glass-card px-5 py-3 rounded-2xl text-rose-400 font-bold text-sm border border-rose-500/30 hover:bg-rose-500/10 flex items-center gap-2"
-            >
-              <UserCheck className="w-4 h-4" /> 👤 3. Surat Kematian
-            </Link>
-          </div>
-
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <a
-              href="#layanan-surat"
-              className="gradient-btn w-full sm:w-auto px-8 py-4 rounded-2xl text-white font-bold text-base flex items-center justify-center gap-3 shadow-xl shadow-emerald-500/25 group"
-            >
-              <Sparkles className="w-5 h-5" />
-              <span>Pilih Jenis Surat Di Bawah</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </a>
-
-            <Link
-              href="#tracking-widget"
-              className="glass-card w-full sm:w-auto px-6 py-4 rounded-2xl text-slate-200 hover:text-white font-semibold text-base flex items-center justify-center gap-2 border border-slate-700/80"
-            >
-              <Search className="w-5 h-5 text-emerald-400" />
-              <span>Cek Status Pengajuan</span>
-            </Link>
-          </div>
-
-          {/* Key Features Badges */}
-          <div className="pt-8 border-t border-slate-800/80 grid grid-cols-2 md:grid-cols-4 gap-4 text-left max-w-3xl mx-auto">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
-                <ShieldCheck className="w-4 h-4" />
-              </div>
-              <span className="text-xs font-medium text-slate-300">Aman & Terverifikasi</span>
+          {/* Right Hero Column: Interactive Service Cards */}
+          <div className="lg:col-span-5 space-y-4">
+            <div className="text-xs font-bold text-slate-500 uppercase tracking-wider px-1">
+              Pilih Surat Yang Ingin Diajukan:
             </div>
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
-                <MessageCircle className="w-4 h-4" />
-              </div>
-              <span className="text-xs font-medium text-slate-300">Integrasi WA Official</span>
+
+            <div className="space-y-3">
+              {services.map((s) => {
+                const IconComp = s.icon;
+                return (
+                  <Link
+                    key={s.id}
+                    href={`/pengajuan/${s.id}`}
+                    className="natural-card p-4 block hover:border-blue-400 transition-all group bg-white"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-10 h-10 rounded-xl ${s.iconBg} flex items-center justify-center shrink-0`}>
+                          <IconComp className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-sm text-slate-900 group-hover:text-blue-900 transition-colors">
+                            {s.title}
+                          </h4>
+                          <p className="text-xs text-slate-500 line-clamp-1">
+                            {s.desc}
+                          </p>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-5 h-5 text-slate-400 group-hover:translate-x-1 transition-transform shrink-0" />
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
-                <Clock className="w-4 h-4" />
-              </div>
-              <span className="text-xs font-medium text-slate-300">Proses Bebas Antre</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
-                <CheckCircle2 className="w-4 h-4" />
-              </div>
-              <span className="text-xs font-medium text-slate-300">Gratis 100% Layanan</span>
-            </div>
+
           </div>
 
         </div>
       </section>
 
-      {/* ─── KARTU LAYANAN SURAT ──────────────────────────────────────── */}
-      <section id="layanan-surat" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 scroll-mt-28">
+      {/* ─── ANNOUNCEMENT BAR ─────────────────────────────────────────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-amber-900">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-amber-200/80 text-amber-900 flex items-center justify-center shrink-0 font-bold">
+              <AlertCircle className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="font-bold text-sm block">Himbauan Pengunggahan Berkas Persyaratan:</span>
+              <span>Pastikan foto KTP, Kartu Keluarga (KK), dan Surat Pengantar RT/RW terlihat jelas dan tidak buram (maksimal 5MB).</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── DETAIL 3 KATEGORI LAYANAN ────────────────────────────────── */}
+      <section id="layanan-surat" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 scroll-mt-28">
         
-        <div className="text-center space-y-3">
-          <span className="text-xs font-bold text-emerald-400 tracking-wider uppercase">Semua Kategori Surat</span>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
-            Pilih Jenis Surat Yang Ingin Diajukan
+        <div className="text-center space-y-2">
+          <span className="text-xs font-bold text-blue-900 uppercase tracking-wider">Kategori Pelayanan Surat</span>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+            Rincian & Persyaratan Surat Kelurahan
           </h2>
-          <p className="text-slate-400 text-sm max-w-xl mx-auto">
-            Tersedia 3 jenis pengajuan surat utama di kelurahan. Klik salah satu di bawah untuk langsung membuka formulir pengajuan.
+          <p className="text-slate-600 text-sm max-w-xl mx-auto">
+            Silakan periksa kelengkapan berkas yang perlu disiapkan sebelum mengisi formulir online di bawah ini.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {services.map((service) => {
-            const IconComponent = service.icon;
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {services.map((s) => {
+            const IconComp = s.icon;
             return (
-              <div
-                key={service.id}
-                className="glass-card rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6 relative overflow-hidden group border border-slate-800"
-              >
-                {service.badge && (
-                  <span className="absolute top-4 right-4 bg-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-emerald-500/30">
-                    {service.badge}
-                  </span>
-                )}
-
+              <div key={s.id} className="natural-card p-6 flex flex-col justify-between space-y-6 bg-white border-slate-200">
                 <div className="space-y-4">
-                  {/* Icon */}
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-tr ${service.color} p-0.5 shadow-lg`}>
-                    <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center text-white">
-                      <IconComponent className="w-7 h-7" />
+                  
+                  {/* Badge & Icon */}
+                  <div className="flex items-center justify-between">
+                    <div className={`w-12 h-12 rounded-xl ${s.iconBg} flex items-center justify-center font-bold`}>
+                      <IconComp className="w-6 h-6" />
                     </div>
+                    <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${s.badgeColor}`}>
+                      {s.badge}
+                    </span>
                   </div>
 
-                  {/* Title & Desc */}
-                  <h3 className="text-xl font-bold text-white group-hover:text-emerald-400 transition-colors">
-                    {service.title}
-                  </h3>
-                  <p className="text-sm text-slate-400 leading-relaxed">
-                    {service.desc}
-                  </p>
+                  <h3 className="text-lg font-bold text-slate-900">{s.title}</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">{s.desc}</p>
 
-                  {/* Requirements List */}
-                  <div className="pt-4 border-t border-slate-800/80 space-y-2">
-                    <span className="text-xs font-semibold text-slate-300 block">Persyaratan Dokumen:</span>
+                  {/* Requirements */}
+                  <div className="pt-4 border-t border-slate-100 space-y-2">
+                    <span className="text-xs font-bold text-slate-700 block">Dokumen Wajib Di-upload:</span>
                     <ul className="space-y-1.5">
-                      {service.requirements.map((req, idx) => (
-                        <li key={idx} className="text-xs text-slate-400 flex items-center gap-2">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                      {s.requirements.map((req, idx) => (
+                        <li key={idx} className="text-xs text-slate-600 flex items-center gap-2">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                           <span>{req}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
+
                 </div>
 
-                {/* Button Action */}
                 <Link
-                  href={`/pengajuan/${service.id}`}
-                  className="gradient-btn w-full py-3.5 px-4 rounded-xl text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/10 group-hover:shadow-emerald-500/25 transition-all"
+                  href={`/pengajuan/${s.id}`}
+                  className={`w-full py-3 px-4 ${s.btnColor} font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all`}
                 >
-                  <span>Buat Surat Ini</span>
+                  <span>Ajukan Surat Ini</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -230,76 +250,46 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ─── QUICK TRACKING WIDGET ───────────────────────────────────── */}
-      <section id="tracking-widget" className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="glass-panel border border-emerald-500/30 rounded-3xl p-8 sm:p-12 relative overflow-hidden text-center space-y-6">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto border border-emerald-500/30">
-            <Search className="w-6 h-6" />
+      {/* ─── ALUR PELAYANAN 4 LANGKAH ─────────────────────────────────── */}
+      <section className="bg-slate-100/70 py-12 border-y border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          
+          <div className="text-center space-y-2">
+            <span className="text-xs font-bold text-blue-900 uppercase tracking-wider">Prosedur Praktis</span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">4 Langkah Mudah Pengajuan Surat</h2>
           </div>
 
-          <div className="space-y-2">
-            <h3 className="text-2xl font-bold text-white">Sudah Mengajukan Surat Sebelumnya?</h3>
-            <p className="text-sm text-slate-300 max-w-md mx-auto">
-              Lacak status pengajuan surat Anda secara realtime menggunakan Kode Tracking UUID pengajuan.
-            </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                step: '01',
+                title: 'Isi Data Diri',
+                desc: 'Pilih jenis surat dan masukkan data NIK, nama, serta detail keperluan Anda.',
+              },
+              {
+                step: '02',
+                title: 'Upload Dokumen',
+                desc: 'Unggah foto Surat Pengantar RT/RW, KTP, dan KK pendukung.',
+              },
+              {
+                step: '03',
+                title: 'Cetak PDF / WA',
+                desc: 'Sistem menerbitkan PDF bukti tanda terima dan mengirim rekap ke WA Admin.',
+              },
+              {
+                step: '04',
+                title: 'Ambil Fisik Surat',
+                desc: 'Petugas memproses surat. Anda tinggal mengambil fisik surat pada jam kerja.',
+              },
+            ].map((item, idx) => (
+              <div key={idx} className="natural-card p-6 bg-white space-y-2 border-slate-200">
+                <span className="text-3xl font-black text-blue-900 block">{item.step}</span>
+                <h4 className="text-sm font-bold text-slate-900">{item.title}</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
           </div>
 
-          <form onSubmit={handleSearchTracking} className="max-w-xl mx-auto flex flex-col sm:flex-row gap-3">
-            <input
-              type="text"
-              placeholder="Masukkan Kode Tracking (contoh: 550e8400-e29b-41d4...)"
-              value={trackingInput}
-              onChange={(e) => setTrackingInput(e.target.value)}
-              className="glass-input flex-grow px-5 py-4 rounded-2xl text-sm font-mono placeholder:font-sans placeholder:text-slate-500"
-              required
-            />
-            <button
-              type="submit"
-              className="gradient-btn px-8 py-4 rounded-2xl text-white font-bold text-sm shrink-0 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20"
-            >
-              <span>Cek Status</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </form>
-        </div>
-      </section>
-
-      {/* ─── ALUR PELAYANAN ───────────────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        <div className="text-center space-y-3">
-          <span className="text-xs font-bold text-emerald-400 tracking-wider uppercase">Langkah Praktis</span>
-          <h2 className="text-3xl font-bold text-white">Bagaimana Alur Pengajuan Surat Berjalan?</h2>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[
-            {
-              step: '01',
-              title: 'Pilih & Isi Form',
-              desc: 'Pilih jenis surat dan lengkapi data diri beserta rincian keperluan surat Anda.',
-            },
-            {
-              step: '02',
-              title: 'Upload Dokumen',
-              desc: 'Unggah foto Surat Pengantar RT/RW, KTP, KK, dan berkas pendukung lainnya.',
-            },
-            {
-              step: '03',
-              title: 'Redirect WhatsApp',
-              desc: 'Klik tombol untuk mengirimkan rekap pengajuan otomatis ke WhatsApp Admin Kelurahan.',
-            },
-            {
-              step: '04',
-              title: 'Verifikasi & Ambil',
-              desc: 'Petugas kelurahan memproses berkas Anda. Anda tinggal datang mengambil fisik surat.',
-            },
-          ].map((item, idx) => (
-            <div key={idx} className="glass-card rounded-2xl p-6 border border-slate-800 space-y-3 relative">
-              <span className="text-4xl font-black text-slate-800 block">{item.step}</span>
-              <h4 className="text-base font-bold text-white">{item.title}</h4>
-              <p className="text-xs text-slate-400 leading-relaxed">{item.desc}</p>
-            </div>
-          ))}
         </div>
       </section>
 

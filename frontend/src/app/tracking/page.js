@@ -12,7 +12,6 @@ import {
   Loader2,
   User,
   Download,
-  ExternalLink,
   XCircle,
 } from 'lucide-react';
 
@@ -59,94 +58,94 @@ function TrackingContent() {
       
       {/* Header */}
       <div className="text-center space-y-2">
-        <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Tracking Layanan</span>
-        <h1 className="text-3xl font-bold text-white tracking-tight">Cek Status Pengajuan Surat</h1>
-        <p className="text-sm text-slate-400 max-w-md mx-auto">
-          Masukkan Kode Tracking UUID yang Anda dapatkan saat pertama kali melakukan submit pengajuan.
+        <span className="text-xs font-bold text-blue-900 uppercase tracking-wider">Tracking Pelayanan</span>
+        <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Cek Status Pengajuan Surat</h1>
+        <p className="text-sm text-slate-600 max-w-md mx-auto">
+          Masukkan Kode Tracking UUID yang Anda dapatkan saat melakukan submit pengajuan.
         </p>
       </div>
 
       {/* Search Input Box */}
-      <form onSubmit={handleSearch} className="glass-panel p-4 rounded-3xl border border-slate-800 flex gap-3 shadow-xl">
+      <form onSubmit={handleSearch} className="natural-card p-3 bg-white border-slate-300 flex gap-2 shadow-sm">
         <div className="relative flex-grow">
           <Search className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
           <input
             type="text"
-            placeholder="Masukkan Kode Tracking UUID..."
+            placeholder="Masukkan Kode Tracking UUID (contoh: 550e8400-e29b...)"
             value={idInput}
             onChange={(e) => setIdInput(e.target.value)}
-            className="glass-input w-full pl-12 pr-4 py-3.5 rounded-2xl text-sm font-mono placeholder:font-sans"
+            className="natural-input w-full pl-12 pr-4 py-3 text-xs font-mono"
             required
           />
         </div>
         <button
           type="submit"
           disabled={loading}
-          className="gradient-btn px-6 py-3.5 rounded-2xl text-white font-bold text-sm shrink-0 flex items-center gap-2 shadow-lg shadow-emerald-500/20"
+          className="btn-emerald px-6 py-3 text-xs font-bold shrink-0 flex items-center gap-1.5 shadow-sm"
         >
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
-          <span>Cari</span>
+          <span>Cari Status</span>
         </button>
       </form>
 
       {/* Error View */}
       {error && (
-        <div className="glass-panel p-6 rounded-2xl border border-rose-500/30 bg-rose-500/5 text-center space-y-3">
-          <AlertCircle className="w-10 h-10 text-rose-400 mx-auto" />
-          <h3 className="text-base font-bold text-white">Pengajuan Tidak Ditemukan</h3>
-          <p className="text-xs text-rose-300 max-w-sm mx-auto">{error}</p>
+        <div className="natural-card p-6 border-rose-200 bg-rose-50 text-center space-y-2">
+          <AlertCircle className="w-10 h-10 text-rose-600 mx-auto" />
+          <h3 className="text-base font-bold text-slate-900">Pengajuan Tidak Ditemukan</h3>
+          <p className="text-xs text-rose-700 max-w-sm mx-auto">{error}</p>
         </div>
       )}
 
       {/* Data Result Timeline View */}
       {data && (
-        <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800 space-y-8 animate-in fade-in duration-200">
+        <div className="natural-card p-6 sm:p-8 bg-white border-slate-200 space-y-8 animate-in fade-in duration-200">
           
           {/* Top Summary */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-800">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-200">
             <div>
-              <span className="text-xs font-mono text-emerald-400 block mb-1">ID: {data.id}</span>
-              <h2 className="text-xl font-bold text-white">{data.jenis_surat_label || data.jenis_surat}</h2>
-              <p className="text-xs text-slate-400 flex items-center gap-1 mt-1">
-                <User className="w-3.5 h-3.5 text-slate-500" /> Pemohon: <strong className="text-slate-300">{data.nama_pemohon}</strong>
+              <span className="text-xs font-mono text-blue-900 block font-bold mb-1">ID: {data.id}</span>
+              <h2 className="text-xl font-bold text-slate-900">{data.jenis_surat_label || data.jenis_surat}</h2>
+              <p className="text-xs text-slate-500 flex items-center gap-1 mt-1">
+                <User className="w-3.5 h-3.5 text-slate-400" /> Pemohon: <strong className="text-slate-700">{data.nama_pemohon}</strong>
               </p>
             </div>
 
             {/* Status Pill Badge */}
             <div className="shrink-0">
               {data.status === 'pending' && (
-                <span className="px-4 py-2 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs font-bold flex items-center gap-1.5">
-                  <Clock className="w-4 h-4" /> Pending / Menunggu Verifikasi
+                <span className="px-4 py-2 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold flex items-center gap-1.5">
+                  <Clock className="w-4 h-4 text-amber-700" /> Pending / Menunggu Verifikasi
                 </span>
               )}
               {data.status === 'processed' && (
-                <span className="px-4 py-2 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/30 text-xs font-bold flex items-center gap-1.5">
-                  <Loader2 className="w-4 h-4 animate-spin" /> Sedang Diproses Admin
+                <span className="px-4 py-2 rounded-full bg-blue-100 text-blue-900 border border-blue-300 text-xs font-bold flex items-center gap-1.5">
+                  <Loader2 className="w-4 h-4 animate-spin text-blue-700" /> Sedang Diproses Admin
                 </span>
               )}
               {data.status === 'completed' && (
-                <span className="px-4 py-2 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs font-bold flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4" /> Surat Selesai
+                <span className="px-4 py-2 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-bold flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-700" /> Surat Selesai
                 </span>
               )}
               {data.status === 'rejected' && (
-                <span className="px-4 py-2 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/30 text-xs font-bold flex items-center gap-1.5">
-                  <XCircle className="w-4 h-4" /> Pengajuan Ditolak
+                <span className="px-4 py-2 rounded-full bg-rose-100 text-rose-900 border border-rose-300 text-xs font-bold flex items-center gap-1.5">
+                  <XCircle className="w-4 h-4 text-rose-700" /> Pengajuan Ditolak
                 </span>
               )}
             </div>
           </div>
 
-          {/* PDF Download Button (If available) */}
+          {/* PDF Download Button */}
           {data.pdf_url && (
-            <div className="glass-card p-4 rounded-2xl border border-emerald-500/30 bg-emerald-950/10 flex items-center justify-between gap-4">
+            <div className="p-4 rounded-xl border border-emerald-300 bg-emerald-50 flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 rounded-lg bg-emerald-200/80 text-emerald-800 flex items-center justify-center shrink-0">
                   <FileText className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-white">Bukti Pengajuan PDF Diterbitkan</h4>
-                  <p className="text-[11px] text-slate-400">Unduh dokumen resmi bukti pendaftaran Anda</p>
+                  <h4 className="text-xs font-bold text-slate-900">Bukti Pengajuan PDF Diterbitkan</h4>
+                  <p className="text-[11px] text-slate-600">Unduh dokumen resmi bukti pendaftaran Anda</p>
                 </div>
               </div>
 
@@ -154,7 +153,7 @@ function TrackingContent() {
                 href={data.pdf_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="gradient-btn px-4 py-2.5 rounded-xl text-white font-semibold text-xs flex items-center gap-1.5 shrink-0 shadow-md"
+                className="btn-emerald px-4 py-2 text-xs font-bold shrink-0 flex items-center gap-1.5 shadow-sm"
               >
                 <span>Unduh PDF</span>
                 <Download className="w-3.5 h-3.5" />
@@ -164,15 +163,15 @@ function TrackingContent() {
 
           {/* Status Timeline */}
           <div className="space-y-6">
-            <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider">Progres Verifikasi Berkas</h3>
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Progres Verifikasi Berkas</h3>
             
-            <div className="relative pl-6 space-y-8 before:absolute before:left-2 font-normal before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-800">
+            <div className="relative pl-6 space-y-8 before:absolute before:left-2 font-normal before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
               
               {/* Step 1: Submit */}
               <div className="relative">
-                <span className="absolute -left-[23px] top-0 w-4 h-4 rounded-full bg-emerald-500 border-4 border-slate-900" />
-                <h4 className="text-sm font-bold text-white">Form Pengajuan & PDF Bukti Diterbitkan</h4>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <span className="absolute -left-[23px] top-0 w-4 h-4 rounded-full bg-emerald-600 border-4 border-white shadow-sm" />
+                <h4 className="text-sm font-bold text-slate-900">Form Pengajuan & PDF Bukti Diterbitkan</h4>
+                <p className="text-xs text-slate-500 mt-0.5">
                   Diajukan pada: {new Date(data.created_at).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })} WIB
                 </p>
               </div>
@@ -180,14 +179,14 @@ function TrackingContent() {
               {/* Step 2: Processing */}
               <div className="relative">
                 <span
-                  className={`absolute -left-[23px] top-0 w-4 h-4 rounded-full border-4 border-slate-900 ${
-                    data.status !== 'pending' ? 'bg-emerald-500' : 'bg-slate-700'
+                  className={`absolute -left-[23px] top-0 w-4 h-4 rounded-full border-4 border-white shadow-sm ${
+                    data.status !== 'pending' ? 'bg-emerald-600' : 'bg-slate-300'
                   }`}
                 />
-                <h4 className={`text-sm font-bold ${data.status !== 'pending' ? 'text-white' : 'text-slate-500'}`}>
+                <h4 className={`text-sm font-bold ${data.status !== 'pending' ? 'text-slate-900' : 'text-slate-400'}`}>
                   Verifikasi Dokumen Kelurahan
                 </h4>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-slate-500 mt-0.5">
                   Admin memeriksa keabsahan foto KTP, KK, dan Surat Pengantar RT/RW.
                 </p>
               </div>
@@ -195,17 +194,17 @@ function TrackingContent() {
               {/* Step 3: Final */}
               <div className="relative">
                 <span
-                  className={`absolute -left-[23px] top-0 w-4 h-4 rounded-full border-4 border-slate-900 ${
-                    data.status === 'completed' ? 'bg-emerald-500' : data.status === 'rejected' ? 'bg-rose-500' : 'bg-slate-700'
+                  className={`absolute -left-[23px] top-0 w-4 h-4 rounded-full border-4 border-white shadow-sm ${
+                    data.status === 'completed' ? 'bg-emerald-600' : data.status === 'rejected' ? 'bg-rose-600' : 'bg-slate-300'
                   }`}
                 />
                 <h4
                   className={`text-sm font-bold ${
                     data.status === 'completed'
-                      ? 'text-emerald-400'
+                      ? 'text-emerald-700'
                       : data.status === 'rejected'
-                      ? 'text-rose-400'
-                      : 'text-slate-500'
+                      ? 'text-rose-700'
+                      : 'text-slate-400'
                   }`}
                 >
                   {data.status === 'completed'
@@ -214,7 +213,7 @@ function TrackingContent() {
                     ? 'Pengajuan Ditolak / Perlu Perbaikan'
                     : 'Surat Selesai Diterbitkan'}
                 </h4>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-slate-500 mt-0.5">
                   {data.status === 'completed'
                     ? 'Silakan datang ke Kantor Kelurahan pada jam operasional untuk mengambil fisik surat.'
                     : 'Bawalah KTP asli pemohon saat pengambilan surat.'}
@@ -233,7 +232,7 @@ function TrackingContent() {
 
 export default function TrackingPage() {
   return (
-    <Suspense fallback={<div className="p-12 text-center text-slate-400">Loading tracking page...</div>}>
+    <Suspense fallback={<div className="p-12 text-center text-slate-500">Loading tracking page...</div>}>
       <TrackingContent />
     </Suspense>
   );
