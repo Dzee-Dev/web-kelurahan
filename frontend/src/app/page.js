@@ -91,7 +91,7 @@ export default function LandingPage() {
 
             {/* Paragraph */}
             <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl">
-              Warga kelurahan dapat mengajukan **Surat Keterangan Tidak Mampu (SKTM)**, **Surat Domisili**, dan **Surat Kematian** secara mandiri. Cukup isi formulir online, upload berkas, dan terima konfirmasi resmi via WhatsApp Admin.
+              Warga kelurahan dapat mengajukan <strong className="text-slate-900 font-bold">Surat Keterangan Tidak Mampu (SKTM)</strong>, <strong className="text-slate-900 font-bold">Surat Domisili</strong>, dan <strong className="text-slate-900 font-bold">Surat Kematian</strong> secara mandiri. Cukup isi formulir online, upload berkas, dan terima konfirmasi resmi via WhatsApp Admin.
             </p>
 
             {/* Fast Tracking Bar */}

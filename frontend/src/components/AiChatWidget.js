@@ -132,7 +132,12 @@ export default function AiChatWidget() {
                       : 'bg-white border border-slate-200 text-slate-800 rounded-bl-none'
                   }`}
                 >
-                  {msg.content}
+                  {msg.content.split(/(\*\*.*?\*\*)/g).map((part, i) => {
+                    if (part.startsWith('**') && part.endsWith('**')) {
+                      return <strong key={i} className="font-bold text-slate-900">{part.slice(2, -2)}</strong>;
+                    }
+                    return part;
+                  })}
                 </div>
 
                 {msg.role === 'user' && (
