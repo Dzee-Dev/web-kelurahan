@@ -18,20 +18,26 @@ async function generatePengajuanPdf(data) {
 
       // Header Banner
       doc
-        .rect(40, 40, 515, 65)
+        .rect(40, 40, 515, 75)
         .fill('#0f172a');
+
+      doc
+        .fillColor('#fbbf24')
+        .fontSize(11)
+        .font('Helvetica-Bold')
+        .text('PEMERINTAH KOTA SERANG - KECAMATAN KASEMEN', 55, 48, { align: 'left' });
 
       doc
         .fillColor('#ffffff')
         .fontSize(16)
         .font('Helvetica-Bold')
-        .text('PEMERINTAH KOTA / KABUPATEN KELURAHAN DIGITAL', 55, 52, { align: 'left' });
+        .text('KELURAHAN MESJID PRIYAYI', 55, 63, { align: 'left' });
 
       doc
-        .fontSize(10)
+        .fontSize(8.5)
         .font('Helvetica')
-        .fillColor('#94a3b8')
-        .text('BUKTI TANDA TERIMA PENGAJUAN SURAT ONLINE RESMI', 55, 74, { align: 'left' });
+        .fillColor('#cbd5e1')
+        .text('Jl. Mesjid Priyayi No. 75, Kasemen 42191 Serang - Banten | Email: mesjidpriyayikelurahan@gmail.com', 55, 85, { align: 'left' });
 
       doc.moveDown(3);
 

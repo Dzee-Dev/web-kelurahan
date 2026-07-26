@@ -19,7 +19,12 @@ import {
   Download,
   HelpCircle,
   ChevronRight,
+  Users,
+  MapPin,
+  Landmark,
 } from 'lucide-react';
+import ProfilKelurahan from '@/components/ProfilKelurahan';
+import StrukturOrganisasi from '@/components/StrukturOrganisasi';
 
 export default function LandingPage() {
   const router = useRouter();
@@ -70,28 +75,30 @@ export default function LandingPage() {
   return (
     <div className="space-y-16 pb-16">
       
-      {/* ─── HERO SECTION (SPLIT NATURAL LAYOUT) ────────────────────── */}
-      <section className="bg-gradient-to-b from-blue-50/70 via-slate-50 to-slate-100/50 border-b border-slate-200/80 pt-10 pb-16 px-4 sm:px-6 lg:px-8">
+      {/* ─── HERO SECTION (SPLIT NATURAL LAYOUT WITH LOGO) ─────────────── */}
+      <section className="bg-gradient-to-b from-blue-50/80 via-slate-50 to-slate-100/60 border-b border-slate-200/80 pt-10 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           {/* Left Hero Column */}
           <div className="lg:col-span-7 space-y-6">
             
             {/* Top Alert Pill */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100/80 border border-blue-200 text-blue-900 text-xs font-semibold">
-              <Building2 className="w-4 h-4 text-blue-700" />
-              <span>Pelayanan Mandiri Kelurahan Online 24 Jam</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200 shadow-sm text-slate-800 text-xs font-bold">
+              <div className="w-5 h-5 rounded-full overflow-hidden shrink-0">
+                <img src="/logo.jpeg" alt="Logo Emblem" className="w-full h-full object-contain" />
+              </div>
+              <span>Kelurahan Mesjid Priyayi, Kasemen - Kota Serang</span>
             </div>
 
             {/* Main Headline */}
             <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
               Pelayanan Surat Kelurahan <br />
-              <span className="text-blue-900">Mudah, Bebas Antre & Resmi</span>
+              <span className="text-blue-900">Mesjid Priyayi Online & Resmi</span>
             </h1>
 
             {/* Paragraph */}
             <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl">
-              Warga kelurahan dapat mengajukan <strong className="text-slate-900 font-bold">Surat Keterangan Tidak Mampu (SKTM)</strong>, <strong className="text-slate-900 font-bold">Surat Domisili</strong>, dan <strong className="text-slate-900 font-bold">Surat Kematian</strong> secara mandiri. Cukup isi formulir online, upload berkas, dan terima konfirmasi resmi via WhatsApp Admin.
+              Warga Kelurahan Mesjid Priyayi kini dapat mengajukan <strong className="text-slate-900 font-bold">Surat SKTM</strong>, <strong className="text-slate-900 font-bold">Surat Domisili</strong>, dan <strong className="text-slate-900 font-bold">Surat Kematian</strong> secara mandiri dari rumah. Lengkap dengan diterbitkannya <strong className="text-emerald-700 font-bold">PDF Bukti Tanda Terima Resmi</strong> & Notifikasi WhatsApp.
             </p>
 
             {/* Fast Tracking Bar */}
@@ -123,11 +130,11 @@ export default function LandingPage() {
               </div>
               <div className="flex items-center gap-2">
                 <FileCheck className="w-4 h-4 text-blue-600" />
-                <span>Diterbitkan PDF Bukti Resmi</span>
+                <span>PDF Tanda Terima Resmi</span>
               </div>
               <div className="flex items-center gap-2">
                 <MessageCircle className="w-4 h-4 text-emerald-600" />
-                <span>WhatsApp Official WABA</span>
+                <span>WhatsApp Official Admin</span>
               </div>
             </div>
 
@@ -136,7 +143,7 @@ export default function LandingPage() {
           {/* Right Hero Column: Interactive Service Cards */}
           <div className="lg:col-span-5 space-y-4">
             <div className="text-xs font-bold text-slate-500 uppercase tracking-wider px-1">
-              Pilih Surat Yang Ingin Diajukan:
+              Pilih Layanan Surat Mandiri:
             </div>
 
             <div className="space-y-3">
@@ -188,6 +195,12 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* ─── PROFIL KELURAHAN MESJID PRIYAYI ──────────────────────────── */}
+      <ProfilKelurahan />
+
+      {/* ─── STRUKTUR ORGANISASI KELURAHAN MESJID PRIYAYI ─────────────── */}
+      <StrukturOrganisasi />
 
       {/* ─── DETAIL 3 KATEGORI LAYANAN ────────────────────────────────── */}
       <section id="layanan-surat" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 scroll-mt-28">

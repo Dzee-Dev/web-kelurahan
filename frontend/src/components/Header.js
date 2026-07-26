@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Building2, FileText, Home, UserCheck, Search, Menu, X, ShieldCheck, ChevronDown, Phone, MapPin } from 'lucide-react';
+import { Building2, FileText, Home, UserCheck, Search, Menu, X, ShieldCheck, ChevronDown, Phone, MapPin, Mail, Users } from 'lucide-react';
 import OperationalBadge from './OperationalBadge';
 
 export default function Header() {
@@ -14,23 +14,25 @@ export default function Header() {
       
       {/* Top Header Bar (Government Style) */}
       <div className="bg-slate-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div className="flex items-center gap-4 text-slate-300">
-            <span className="flex items-center gap-1.5 font-medium">
-              <Building2 className="w-3.5 h-3.5 text-blue-400" /> Portal Resmi Pelayanan Publik Kelurahan Digital
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-slate-300">
+            <span className="flex items-center gap-1.5 font-medium text-slate-200">
+              <MapPin className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span>Jl. Mesjid Priyayi No. 75, Kasemen 42191, Serang - Banten</span>
             </span>
-            <span className="hidden md:inline text-slate-600">|</span>
-            <span className="hidden md:flex items-center gap-1 text-slate-400">
-              <MapPin className="w-3.5 h-3.5 text-slate-400" /> Kecamatan Kantor, Kota Administrasi
-            </span>
+            <span className="hidden md:inline text-slate-700">|</span>
+            <a href="mailto:mesjidpriyayikelurahan@gmail.com" className="flex items-center gap-1 text-slate-300 hover:text-white transition-colors">
+              <Mail className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+              <span>mesjidpriyayikelurahan@gmail.com</span>
+            </a>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1 text-emerald-400 font-semibold">
-              <ShieldCheck className="w-3.5 h-3.5" /> Terintegrasi WABA Official
+            <span className="flex items-center gap-1 text-emerald-400 font-semibold text-[11px]">
+              <ShieldCheck className="w-3.5 h-3.5" /> Portal Pelayanan Publik Resmi
             </span>
-            <span className="text-slate-600">|</span>
-            <a href="tel:112" className="text-slate-300 hover:text-white flex items-center gap-1">
+            <span className="text-slate-700">|</span>
+            <a href="tel:112" className="text-slate-300 hover:text-white flex items-center gap-1 text-[11px]">
               <Phone className="w-3.5 h-3.5 text-amber-400" /> Panggilan Darurat: 112
             </a>
           </div>
@@ -43,19 +45,19 @@ export default function Header() {
           
           {/* Logo & Emblem */}
           <Link href="/" className="flex items-center gap-3.5 group">
-            <div className="w-11 h-11 rounded-xl bg-blue-900 flex items-center justify-center text-white shadow-md shadow-blue-950/20 group-hover:bg-blue-800 transition-colors">
-              <Building2 className="w-6 h-6 text-amber-400" />
+            <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 p-1 flex items-center justify-center shadow-sm group-hover:border-amber-400 transition-colors shrink-0">
+              <img src="/logo.jpeg" alt="Logo Kelurahan Mesjid Priyayi" className="w-full h-full object-contain" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-extrabold text-lg text-slate-900 tracking-tight">KELURAHAN DIGITAL</span>
+                <span className="font-extrabold text-base sm:text-lg text-slate-900 tracking-tight">KELURAHAN MESJID PRIYAYI</span>
               </div>
-              <p className="text-xs text-slate-500 font-medium">Sistem Pengajuan Surat Mandiri Warga</p>
+              <p className="text-xs text-slate-500 font-medium">Kec. Kasemen, Kota Serang - Banten</p>
             </div>
           </Link>
 
           {/* Operational Status Pill */}
-          <div className="hidden lg:block">
+          <div className="hidden xl:block">
             <OperationalBadge />
           </div>
 
@@ -63,14 +65,29 @@ export default function Header() {
           <div className="hidden md:flex items-center gap-6">
             <Link
               href="/"
-              className="text-slate-700 hover:text-blue-900 font-semibold text-sm transition-colors py-2"
+              className="text-slate-700 hover:text-blue-900 font-semibold text-xs sm:text-sm transition-colors py-2"
             >
               Beranda
             </Link>
 
             <Link
+              href="/#profil"
+              className="text-slate-700 hover:text-blue-900 font-semibold text-xs sm:text-sm transition-colors py-2"
+            >
+              Profil & Visi Misi
+            </Link>
+
+            <Link
+              href="/#struktur"
+              className="flex items-center gap-1 text-slate-700 hover:text-blue-900 font-semibold text-xs sm:text-sm transition-colors py-2"
+            >
+              <Users className="w-4 h-4 text-amber-600" />
+              Struktur Organisasi
+            </Link>
+
+            <Link
               href="/tracking"
-              className="flex items-center gap-1.5 text-slate-700 hover:text-blue-900 font-semibold text-sm transition-colors py-2"
+              className="flex items-center gap-1 text-slate-700 hover:text-blue-900 font-semibold text-xs sm:text-sm transition-colors py-2"
             >
               <Search className="w-4 h-4 text-blue-700" />
               Tracking Surat
@@ -81,9 +98,9 @@ export default function Header() {
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 onBlur={() => setTimeout(() => setDropdownOpen(false), 200)}
-                className="btn-emerald text-white text-sm font-semibold px-5 py-2.5 rounded-xl flex items-center gap-2 shadow-sm"
+                className="btn-emerald text-white text-xs sm:text-sm font-semibold px-4 sm:px-5 py-2.5 rounded-xl flex items-center gap-2 shadow-sm"
               >
-                <span>Ajukan Surat Sekarang</span>
+                <span>Ajukan Surat</span>
                 <ChevronDown className={`w-4 h-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
               </button>
 
@@ -164,6 +181,20 @@ export default function Header() {
               className="block font-semibold text-slate-800 hover:text-blue-900 text-sm py-2.5 border-b border-slate-100"
             >
               Beranda Utama
+            </Link>
+            <Link
+              href="/#profil"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block font-semibold text-slate-800 hover:text-blue-900 text-sm py-2.5 border-b border-slate-100"
+            >
+              Profil Kelurahan
+            </Link>
+            <Link
+              href="/#struktur"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block font-semibold text-slate-800 hover:text-blue-900 text-sm py-2.5 border-b border-slate-100"
+            >
+              Struktur Organisasi
             </Link>
             <Link
               href="/tracking"

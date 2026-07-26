@@ -20,15 +20,15 @@ function generatePengajuanPdf(data) {
       // ─── KOP SURAT RESMI KELURAHAN ─────────────────────────────
       doc
         .font('Helvetica-Bold')
-        .fontSize(14)
-        .text('PEMERINTAH KOTA KELURAHAN DIGITAL', { align: 'center' })
-        .fontSize(16)
-        .text('KECAMATAN PELAYANAN PUBLIK', { align: 'center' })
         .fontSize(12)
-        .text('KANTOR KELURAHAN DIGITAL ONLINE', { align: 'center' })
+        .text('PEMERINTAH KOTA SERANG', { align: 'center' })
+        .fontSize(14)
+        .text('KECAMATAN KASEMEN', { align: 'center' })
+        .fontSize(16)
+        .text('KELURAHAN MESJID PRIYAYI', { align: 'center' })
         .font('Helvetica')
         .fontSize(9)
-        .text('Jl. Raya Kelurahan No. 1, Telp: (021) 1234567, Website: kelurahan.go.id', { align: 'center' });
+        .text('Jl. Mesjid Priyayi No. 75 Kasemen 42191 Serang-Banten | Email: mesjidpriyayikelurahan@gmail.com', { align: 'center' });
 
       // Garis Ganda Kop Surat
       doc.moveDown(0.5);
