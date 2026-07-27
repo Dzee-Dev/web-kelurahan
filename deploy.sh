@@ -55,13 +55,11 @@ sudo apt install -y nginx
 sudo systemctl start nginx
 sudo systemctl enable nginx
 
-# ── 7. CLONE PROJECT ──
-echo "📦 Cloning project..."
-cd /home
-if [ ! -d "web-kelurahan" ]; then
-  git clone https://github.com/Dzee-Dev/web-kelurahan.git
-fi
-cd web-kelurahan
+# ── 7. GO TO PROJECT DIR ──
+echo "📦 Setting up project directory..."
+# Pastikan kita berada di folder project tempat skrip ini dijalankan
+PROJECT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+cd "$PROJECT_DIR"
 
 # ── 8. SETUP BACKEND ──
 echo "📦 Setting up Backend..."
@@ -90,7 +88,7 @@ echo "   ✅ Frontend ready"
 
 # ── 10. START DENGAN PM2 ──
 echo "📦 Starting services with PM2..."
-cd /home/web-kelurahan
+cd "$PROJECT_DIR"
 
 # Backend (port 3000)
 pm2 start backend/src/index.js --name "kelurahan-backend" --env production
