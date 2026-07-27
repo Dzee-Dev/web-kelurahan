@@ -43,14 +43,22 @@ const UPLOAD_CONFIG = {
 const DOKUMEN_WAJIB = {
   sktm: ['surat_pengantar_rt_rw', 'ktp_pemohon', 'kartu_keluarga'],
   domisili: ['surat_pengantar_rt_rw', 'ktp_pemohon', 'kartu_keluarga'],
-  kematian: ['surat_pengantar_rt_rw', 'ktp_pemohon', 'kartu_keluarga'],
+  kematian: [
+    'surat_pengantar_rt_rw',
+    'ktp_pemohon',
+    'ktp_almarhum',
+    'kk_almarhum',
+    'surat_kematian_rs',
+    'ktp_saksi_1',
+    'ktp_saksi_2',
+  ],
 };
 
 // Field dokumen opsional per jenis surat
 const DOKUMEN_OPSIONAL = {
   sktm: [],
   domisili: [],
-  kematian: ['ktp_almarhum', 'kk_almarhum', 'surat_kematian_rs', 'ktp_saksi_1', 'ktp_saksi_2', 'akta_kelahiran_almarhum'],
+  kematian: ['akta_kelahiran_almarhum'],
 };
 
 module.exports = {
