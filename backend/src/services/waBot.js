@@ -71,25 +71,13 @@ function initWhatsAppBot() {
         const reply = '✅ *Terima Kasih!*\nBerkas pengajuan surat Anda telah masuk ke sistem kami dan akan segera diverifikasi oleh Admin Kelurahan.\n\nAnda dapat memantau status surat Anda secara berkala melalui menu Tracking di website kami.';
         await message.reply(reply);
         console.log(`\ud83d\udce4 Auto-reply penerimaan surat terkirim ke ${message.from}`);
-        return; // Stop di sini, jangan dilempar ke AI
+        return; 
       }
 
-      // 2. Generate AI response untuk pertanyaan umum
-      let reply = '';
-      if (incomingText.trim().length > 3) {
-        reply = await generateAiResponse(incomingText);
-        const statusNote = isOperationalHours()
-          ? '\n\n---\n*Status Kantor:* \ud83d\udfe2 Jam Operasional (08:00 - 15:00 WIB)'
-          : '\n\n---\n*Status Kantor:* \ud83d\udd34 Luar Jam Operasional. Pesan akan ditindaklanjuti hari kerja berikutnya.';
-        reply += statusNote;
-      } else {
-        reply = isOperationalHours()
-          ? 'Terima kasih, laporan Anda telah kami terima. Admin kami akan segera merespons.'
-          : 'Mohon maaf, saat ini di luar jam operasional kantor. Pesan Anda akan diproses pada hari kerja berikutnya mulai pukul 08:00 WIB.';
-      }
+      // Jika pesan biasa (bukan format web), bot akan DIAM (tidak membalas apapun)
+      // Ini mencegah bot membalas pesan pribadi (teman/keluarga) dan mencegah akun diblokir.
+      console.log(`\ud83d\udeab Pesan diabaikan (bukan format pengajuan)`);
 
-      await message.reply(reply);
-      console.log(`\ud83d\udce4 Auto-reply terkirim ke ${message.from}`);
     } catch (err) {
       console.error('\u274C Error auto-reply:', err.message);
     }
