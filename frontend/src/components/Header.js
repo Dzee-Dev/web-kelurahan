@@ -25,9 +25,9 @@ export default function Header() {
               mesjidpriyayikelurahan@gmail.com
             </a>
           </div>
-          <a href="tel:085694083400" className="flex items-center gap-1.5 hover:text-white transition-colors">
+          <a href="tel:085882546351" className="flex items-center gap-1.5 hover:text-white transition-colors">
             <Phone className="w-3.5 h-3.5" />
-            <span>085694083400</span>
+            <span>085882546351</span>
           </a>
         </div>
       </div>
