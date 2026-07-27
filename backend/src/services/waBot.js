@@ -33,11 +33,26 @@ function initWhatsAppBot() {
     },
   });
 
-  client.on('qr', (qr) => {
+  client.on('qr', async (qr) => {
     lastQr = qr;
     console.log('\n\ud83d\udcf1 Scan QR Code berikut dengan WhatsApp Kelurahan:');
     qrcode.generate(qr, { small: true });
     console.log('\n');
+
+    // Solusi Anti-Gagal: Minta Kode Pairing (8 Digit PIN) untuk Tautkan via Nomor HP
+    if (process.env.WA_ADMIN_PHONE) {
+      try {
+        const cleanPhone = process.env.WA_ADMIN_PHONE.replace(/[^0-9]/g, '');
+        const phoneWithCountry = cleanPhone.startsWith('0') ? '62' + cleanPhone.slice(1) : cleanPhone;
+        const pairingCode = await client.requestPairingCode(phoneWithCountry);
+        console.log(`\n\ud83d\udd11 ==========================================`);
+        console.log(`\ud83d\udd11 KODE PAIRING WHATSAPP (8 DIGIT): ${pairingCode}`);
+        console.log(`\ud83d\udd11 Buka WA HP -> Perangkat Tertaut -> Tautkan dengan Nomor Telepon`);
+        console.log(`\ud83d\udd11 ==========================================\n`);
+      } catch (err) {
+        console.log('Gagal membuat kode pairing otomatis:', err.message);
+      }
+    }
   });
 
   client.on('ready', () => {
