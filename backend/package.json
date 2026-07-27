@@ -21,7 +21,7 @@
     "pg": "^8.13.0",
     "qrcode-terminal": "^0.12.0",
     "uuid": "^11.0.0",
-    "whatsapp-web.js": "https://codeload.github.com/wppconnect-team/whatsapp-web.js/tar.gz/refs/heads/main"
+    "whatsapp-web.js": "https://github.com/wppconnect-team/whatsapp-web.js/archive/refs/heads/main.tar.gz"
   },
   "engines": {
     "node": ">=18.0.0"
