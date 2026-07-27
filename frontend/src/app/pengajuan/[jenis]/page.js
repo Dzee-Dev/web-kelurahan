@@ -616,9 +616,9 @@ export default function FormPengajuanPage() {
 
             <div className="p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-900 text-xs flex items-start gap-2.5">
               <ShieldCheck className="w-5 h-5 shrink-0 mt-0.5 text-blue-700" />
-              <p>
-                Dengan menekan <strong>"Submit Pengajuan & WhatsApp"</strong>, berkas Anda akan diterbitkan bukti PDF resminya dan dikirimkan ke Admin Kelurahan.
-              </p>
+                <p>
+                  Dengan menekan <strong>"Submit Pengajuan & WhatsApp"</strong>, berkas Anda akan diterbitkan bukti PDF resminya dan dikirimkan ke Admin Kelurahan.
+                </p>
             </div>
           </div>
         )}

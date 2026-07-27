@@ -17,7 +17,7 @@ export async function POST(req) {
   } catch (err) {
     console.error('Proxy POST /api/pengajuan error:', err);
     return NextResponse.json(
-      { success: false, error: { message: 'Backend tidak tersedia' } },
+      { success: false, error: { message: err.message || 'Backend tidak tersedia atau payload terlalu besar' } },
       { status: 502 }
     );
   }
@@ -41,7 +41,7 @@ export async function GET(req) {
   } catch (err) {
     console.error('Proxy GET /api/pengajuan error:', err);
     return NextResponse.json(
-      { success: false, error: { message: 'Backend tidak tersedia' } },
+      { success: false, error: { message: err.message || 'Backend tidak tersedia' } },
       { status: 502 }
     );
   }
