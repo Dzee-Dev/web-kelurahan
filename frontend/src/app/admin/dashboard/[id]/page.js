@@ -20,7 +20,7 @@ const LABEL_JENIS_SURAT = {
   kematian: 'Surat Keterangan Kematian',
 };
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3000';
+const API_BASE = '/api/proxy';
 
 export default function AdminDetailPage() {
   const router = useRouter();
@@ -39,19 +39,22 @@ export default function AdminDetailPage() {
   const fetchDetail = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${BACKEND_URL}/api/pengajuan/${params.id}`);
+      const res = await fetch(`${API_BASE}/pengajuan/${params.id}`);
       const result = await res.json();
-      if (result.success) setData(result.data);
+      if (result.success) {
+        setData(result.data);
+      }
     } catch (err) {
-      console.error('Error:', err);
+      console.error('Fetch detail error:', err);
     }
     setLoading(false);
   };
 
   const updateStatus = async (newStatus) => {
     if (!confirm(`Ubah status menjadi "${STATUS_LABELS[newStatus].label}"?`)) return;
+
     try {
-      const res = await fetch(`${BACKEND_URL}/api/pengajuan/${params.id}/status`, {
+      const res = await fetch(`${API_BASE}/pengajuan/${params.id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),

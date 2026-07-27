@@ -20,7 +20,7 @@ const JENIS_ICONS = {
   kematian: UserCheck,
 };
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3000';
+const API_BASE = '/api/proxy';
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -46,7 +46,7 @@ export default function AdminDashboard() {
       if (filter.status) params.set('status', filter.status);
       if (filter.jenis) params.set('jenis_surat', filter.jenis);
 
-      const res = await fetch(`${BACKEND_URL}/api/pengajuan?${params}`);
+      const res = await fetch(`${API_BASE}/pengajuan?${params}`);
       const result = await res.json();
 
       if (result.success) {
@@ -63,7 +63,7 @@ export default function AdminDashboard() {
     if (!confirm(`Ubah status menjadi "${STATUS_LABELS[newStatus].label}"?`)) return;
 
     try {
-      const res = await fetch(`${BACKEND_URL}/api/pengajuan/${id}/status`, {
+      const res = await fetch(`${API_BASE}/pengajuan/${id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),
