@@ -40,6 +40,18 @@ function initWhatsAppBot() {
 
   client.on('authenticated', () => {
     console.log('\ud83d\udd10 WhatsApp Bot authenticated');
+    // Debugging: ambil screenshot jika tersangkut lebih dari 15 detik
+    setTimeout(async () => {
+      if (!isReady && client.pupPage) {
+        try {
+          console.log('\u26a0\ufe0f Mengambil screenshot layar WA Web untuk debugging...');
+          await client.pupPage.screenshot({ path: 'wa-debug.png' });
+          console.log('\u2705 Screenshot tersimpan sebagai wa-debug.png. Beritahu pengguna.');
+        } catch (err) {
+          console.error('Gagal mengambil screenshot', err);
+        }
+      }
+    }, 15000);
   });
 
   client.on('auth_failure', (msg) => {
