@@ -1,7 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import { useState, useEffect } from 'react';
-import { QrCode, Download, X, Copy, Check, ExternalLink, Smartphone } from 'lucide-react';
+import { QrCode, Download, X, Copy, Check, Smartphone } from 'lucide-react';
 
 export default function QrModal({ isOpen, onClose }) {
   const [currentUrl, setCurrentUrl] = useState('');
@@ -15,9 +16,11 @@ export default function QrModal({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(currentUrl || 'https://web-kelurahan.vercel.app')}&margin=10`;
+  const targetUrl = currentUrl || 'https://web-kelurahan.vercel.app';
+  const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(targetUrl)}&margin=10`;
 
   const handleCopy = () => {
+    if (!currentUrl) return;
     navigator.clipboard.writeText(currentUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -35,7 +38,7 @@ export default function QrModal({ isOpen, onClose }) {
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
-    } catch (err) {
+    } catch {
       window.open(qrImageUrl, '_blank');
     }
   };
@@ -46,6 +49,7 @@ export default function QrModal({ isOpen, onClose }) {
         
         {/* Close Button */}
         <button
+          type="button"
           onClick={onClose}
           className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-colors"
         >
@@ -75,14 +79,15 @@ export default function QrModal({ isOpen, onClose }) {
 
           <div className="mt-4 flex items-center gap-1.5 text-xs text-emerald-800 font-semibold bg-emerald-100/80 px-3 py-1.5 rounded-full">
             <Smartphone className="w-3.5 h-3.5" />
-            <span>Tinggal Scan Menggunakan Kamera HP</span>
+            <span>Scan Menggunakan Kamera HP</span>
           </div>
         </div>
 
         {/* URL Link Box */}
         <div className="bg-gray-50 p-3 rounded-xl border border-gray-200 flex items-center justify-between gap-2 text-xs">
-          <span className="font-mono text-gray-600 truncate font-medium">{currentUrl}</span>
+          <span className="font-mono text-gray-600 truncate font-medium">{targetUrl}</span>
           <button
+            type="button"
             onClick={handleCopy}
             className="p-1.5 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors flex items-center gap-1 font-semibold shrink-0"
           >
@@ -94,6 +99,7 @@ export default function QrModal({ isOpen, onClose }) {
         {/* Actions */}
         <div className="flex items-center gap-3">
           <button
+            type="button"
             onClick={handleDownload}
             className="btn-emerald w-full py-3 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-sm"
           >

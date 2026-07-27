@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+import Link from 'next/link';
 import QrModal from '@/components/QrModal';
 import { FileText, Home, UserCheck, Search, Menu, X, ChevronDown, Phone, MapPin, Mail, QrCode } from 'lucide-react';
 
