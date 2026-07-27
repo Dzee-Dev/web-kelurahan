@@ -63,15 +63,6 @@ async function submitPengajuan(req, res, next) {
 
     pengajuan.dokumen_urls = dokumenUrls;
 
-    // 4. Kirim notifikasi ke WhatsApp Admin via Bot
-    try {
-      const waMessage = buildWaMessage(pengajuan);
-      const adminPhone = process.env.WA_ADMIN_PHONE || '6285694083400';
-      await sendMessage(adminPhone, waMessage);
-    } catch (waErr) {
-      console.error('\u26a0\ufe0f Gagal kirim WA:', waErr.message);
-    }
-
     // 5. Build WA deep link fallback (untuk warga klik manual)
     const adminPhone = process.env.WA_ADMIN_PHONE || '6285694083400';
     const waMessage = buildWaMessage(pengajuan);

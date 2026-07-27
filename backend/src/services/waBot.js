@@ -66,7 +66,15 @@ function initWhatsAppBot() {
       const incomingText = message.body || '';
       console.log(`\ud83d\udce9 Pesan masuk dari ${message.from}: "${incomingText}"`);
 
-      // Generate AI response
+      // 1. Cek apakah ini adalah pesan pengajuan dari Web
+      if (incomingText.includes('PENGAJUAN SURAT KELURAHAN ONLINE') && incomingText.includes('Kode Tracking ID')) {
+        const reply = '✅ *Terima Kasih!*\nBerkas pengajuan surat Anda telah masuk ke sistem kami dan akan segera diverifikasi oleh Admin Kelurahan.\n\nAnda dapat memantau status surat Anda secara berkala melalui menu Tracking di website kami.';
+        await message.reply(reply);
+        console.log(`\ud83d\udce4 Auto-reply penerimaan surat terkirim ke ${message.from}`);
+        return; // Stop di sini, jangan dilempar ke AI
+      }
+
+      // 2. Generate AI response untuk pertanyaan umum
       let reply = '';
       if (incomingText.trim().length > 3) {
         reply = await generateAiResponse(incomingText);
