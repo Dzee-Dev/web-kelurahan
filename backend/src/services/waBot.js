@@ -45,15 +45,24 @@ function initWhatsAppBot() {
     if (process.env.WA_ADMIN_PHONE && !hasRequestedPairing) {
       hasRequestedPairing = true;
       try {
+        await new Promise((res) => setTimeout(res, 3000));
         const cleanPhone = process.env.WA_ADMIN_PHONE.replace(/[^0-9]/g, '');
         const phoneWithCountry = cleanPhone.startsWith('0') ? '62' + cleanPhone.slice(1) : cleanPhone;
+        
+        if (!phoneWithCountry || phoneWithCountry.length < 10) {
+          console.log(`⚠️ WA_ADMIN_PHONE di .env belum diisi dengan nomor HP asli (Sekarang: "${process.env.WA_ADMIN_PHONE}")`);
+          hasRequestedPairing = false;
+          return;
+        }
+
+        console.log(`⏳ Mengajukan Kode Pairing untuk nomor: +${phoneWithCountry}...`);
         const pairingCode = await client.requestPairingCode(phoneWithCountry);
         console.log(`\n\ud83d\udd11 ==========================================`);
         console.log(`\ud83d\udd11 KODE PAIRING WHATSAPP (8 DIGIT): ${pairingCode}`);
         console.log(`\ud83d\udd11 Buka WA HP -> Perangkat Tertaut -> Tautkan dengan Nomor Telepon`);
         console.log(`\ud83d\udd11 ==========================================\n`);
       } catch (err) {
-        console.log('Gagal membuat kode pairing otomatis:', err.message);
+        console.log('Gagal membuat kode pairing otomatis:', err.message || err);
         hasRequestedPairing = false;
       }
 
