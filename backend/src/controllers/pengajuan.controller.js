@@ -63,10 +63,21 @@ async function submitPengajuan(req, res, next) {
 
     pengajuan.dokumen_urls = dokumenUrls;
 
-    // 5. Build WA deep link fallback (untuk warga klik manual)
-    const adminPhone = process.env.WA_ADMIN_PHONE || '6285694083400';
+    // 5. Kirim Recap Lengkap via Bot WA secara background
+    let adminPhone = process.env.WA_ADMIN_PHONE || '6285694083400';
+    adminPhone = adminPhone.replace(/[^0-9]/g, '');
+    if (adminPhone.startsWith('0')) adminPhone = '62' + adminPhone.slice(1);
+    
     const waMessage = buildWaMessage(pengajuan);
-    const waDeepLink = `https://wa.me/${adminPhone}?text=${encodeURIComponent(waMessage)}`;
+    
+    // Bot mengirim pesan langsung ke admin
+    sendMessage(adminPhone, waMessage).catch(err => {
+      console.error('Gagal mengirim pesan bot:', err.message);
+    });
+
+    // 6. Build WA deep link fallback (menggunakan wa.me resmi)
+    const shortMessage = `Halo Admin, saya telah mensubmit pengajuan ${LABEL_JENIS_SURAT[jenis_surat] || jenis_surat} atas nama ${nama_pemohon}.\n\nTracking ID: ${pengajuan.id}\n\nMohon dicek. Terima kasih.`;
+    const waDeepLink = `https://wa.me/${adminPhone}?text=${encodeURIComponent(shortMessage)}`;
 
     // 6. Response
     res.status(201).json({
