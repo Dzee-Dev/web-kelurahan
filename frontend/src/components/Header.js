@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { FileText, Home, UserCheck, Search, Menu, X, ChevronDown, Phone, MapPin, Mail } from 'lucide-react';
+import QrModal from '@/components/QrModal';
+import { FileText, Home, UserCheck, Search, Menu, X, ChevronDown, Phone, MapPin, Mail, QrCode } from 'lucide-react';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [qrModalOpen, setQrModalOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
@@ -56,9 +56,14 @@ export default function Header() {
             <Link href="/#struktur" className="px-3 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors">
               Struktur Organisasi
             </Link>
-            <Link href="/tracking" className="px-3 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors">
-              Lacak Surat
-            </Link>
+            <button
+              onClick={() => setQrModalOpen(true)}
+              className="px-3 py-2 text-sm text-gray-700 hover:text-emerald-700 hover:bg-emerald-50 rounded-md transition-colors flex items-center gap-1.5 font-medium"
+              title="Tampilkan Barcode / QR Code Website"
+            >
+              <QrCode className="w-4 h-4 text-emerald-600" />
+              <span>Barcode Web</span>
+            </button>
 
             <div className="relative ml-2">
               <button
@@ -116,6 +121,13 @@ export default function Header() {
           <Link href="/#profil" onClick={() => setMobileMenuOpen(false)} className="block py-2.5 text-sm text-gray-700 hover:text-gray-900 font-medium">Profil</Link>
           <Link href="/#struktur" onClick={() => setMobileMenuOpen(false)} className="block py-2.5 text-sm text-gray-700 hover:text-gray-900 font-medium">Struktur Organisasi</Link>
           <Link href="/tracking" onClick={() => setMobileMenuOpen(false)} className="block py-2.5 text-sm text-gray-700 hover:text-gray-900 font-medium">Lacak Surat</Link>
+          <button
+            onClick={() => { setMobileMenuOpen(false); setQrModalOpen(true); }}
+            className="w-full text-left py-2.5 text-sm text-emerald-700 font-semibold flex items-center gap-2"
+          >
+            <QrCode className="w-4 h-4" />
+            <span>Barcode QR Web</span>
+          </button>
           <div className="pt-3 border-t border-gray-100 space-y-1.5">
             <Link href="/pengajuan/sktm" onClick={() => setMobileMenuOpen(false)} className="block py-2 px-3 text-sm font-medium text-green-800 bg-green-50 rounded-md">SKTM — Surat Tidak Mampu</Link>
             <Link href="/pengajuan/domisili" onClick={() => setMobileMenuOpen(false)} className="block py-2 px-3 text-sm font-medium text-blue-800 bg-blue-50 rounded-md">Surat Domisili</Link>
@@ -123,6 +135,9 @@ export default function Header() {
           </div>
         </div>
       )}
+
+      {/* QR Modal */}
+      <QrModal isOpen={qrModalOpen} onClose={() => setQrModalOpen(false)} />
     </header>
   );
 }
