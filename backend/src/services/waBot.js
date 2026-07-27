@@ -40,27 +40,42 @@ function initWhatsAppBot() {
     // Solusi Anti-Gagal: Minta Kode Pairing (8 Digit PIN) hanya 1x & Tahan selama 3 Menit
     if (process.env.WA_ADMIN_PHONE && !hasRequestedPairing) {
       hasRequestedPairing = true;
-      try {
-        await new Promise((res) => setTimeout(res, 3000));
+      (async () => {
         const cleanPhone = process.env.WA_ADMIN_PHONE.replace(/[^0-9]/g, '');
         const phoneWithCountry = cleanPhone.startsWith('0') ? '62' + cleanPhone.slice(1) : cleanPhone;
-        
+
         if (!phoneWithCountry || phoneWithCountry.length < 10) {
           console.log(`⚠️ WA_ADMIN_PHONE di .env belum diisi dengan nomor HP asli (Sekarang: "${process.env.WA_ADMIN_PHONE}")`);
           hasRequestedPairing = false;
           return;
         }
 
-        console.log(`⏳ Mengajukan Kode Pairing untuk nomor: +${phoneWithCountry}...`);
-        const pairingCode = await client.requestPairingCode(phoneWithCountry);
-        console.log(`\n\ud83d\udd11 ==========================================`);
-        console.log(`\ud83d\udd11 KODE PAIRING WHATSAPP (8 DIGIT): ${pairingCode}`);
-        console.log(`\ud83d\udd11 Buka WA HP -> Perangkat Tertaut -> Tautkan dengan Nomor Telepon`);
-        console.log(`\ud83d\udd11 ==========================================\n`);
-      } catch (err) {
-        console.log('Gagal membuat kode pairing otomatis:', err.message || err);
-        hasRequestedPairing = false;
-      }
+        console.log(`⏳ Menunggu 7 detik sebelum meminta Kode Pairing (+${phoneWithCountry})...`);
+        await new Promise((res) => setTimeout(res, 7000));
+
+        let attempts = 0;
+        let pairingCode = null;
+        while (attempts < 3 && !pairingCode) {
+          attempts++;
+          try {
+            console.log(`⏳ Mengajukan Kode Pairing (Percobaan ${attempts}/3)...`);
+            pairingCode = await client.requestPairingCode(phoneWithCountry);
+          } catch (err) {
+            console.log(`⚠️ Percobaan ${attempts} gagal:`, err.message || err);
+            if (attempts < 3) await new Promise((res) => setTimeout(res, 3000));
+          }
+        }
+
+        if (pairingCode) {
+          console.log(`\n\ud83d\udd11 ==========================================`);
+          console.log(`\ud83d\udd11 KODE PAIRING WHATSAPP (8 DIGIT): ${pairingCode}`);
+          console.log(`\ud83d\udd11 Buka WA HP -> Perangkat Tertaut -> Tautkan dengan Nomor Telepon`);
+          console.log(`\ud83d\udd11 ==========================================\n`);
+        } else {
+          console.log('❌ Gagal membuat kode pairing setelah 3x percobaan.');
+          hasRequestedPairing = false;
+        }
+      })();
 
       // Tahan kode selama 3 menit (180.000 ms) agar tidak berganti-ganti saat mengetik
       setTimeout(() => {
