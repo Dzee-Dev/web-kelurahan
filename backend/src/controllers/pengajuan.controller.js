@@ -75,9 +75,8 @@ async function submitPengajuan(req, res, next) {
       console.error('Gagal mengirim pesan bot:', err.message);
     });
 
-    // 6. Build WA deep link fallback (menggunakan wa.me resmi)
-    const shortMessage = `Halo Admin, saya telah mensubmit pengajuan ${LABEL_JENIS_SURAT[jenis_surat] || jenis_surat} atas nama ${nama_pemohon}.\n\nTracking ID: ${pengajuan.id}\n\nMohon dicek. Terima kasih.`;
-    const waDeepLink = `https://wa.me/${adminPhone}?text=${encodeURIComponent(shortMessage)}`;
+    // 6. Build WA deep link (pesan lengkap dengan seluruh tautan download PDF & foto dokumen)
+    const waDeepLink = `https://wa.me/${adminPhone}?text=${encodeURIComponent(waMessage)}`;
 
     // 6. Response
     res.status(201).json({
