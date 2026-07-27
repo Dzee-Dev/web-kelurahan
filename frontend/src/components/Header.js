@@ -2,232 +2,124 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Building2, FileText, Home, UserCheck, Search, Menu, X, ShieldCheck, ChevronDown, Phone, MapPin, Mail, Users } from 'lucide-react';
-import OperationalBadge from './OperationalBadge';
+import { FileText, Home, UserCheck, Search, Menu, X, ChevronDown, Phone, MapPin, Mail } from 'lucide-react';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
       
-      {/* Top Header Bar (Government Style) */}
-      <div className="bg-slate-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-slate-300">
-            <span className="flex items-center gap-1.5 font-medium text-slate-200">
-              <MapPin className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-              <span>Jl. Mesjid Priyayi No. 75, Kasemen 42191, Serang - Banten</span>
+      {/* Top Info Bar */}
+      <div className="bg-gray-800 text-gray-300 text-[13px] py-1.5 px-4">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <div className="hidden sm:flex items-center gap-4">
+            <span className="flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5" />
+              Jl. Mesjid Priyayi No. 75, Kasemen 42191
             </span>
-            <span className="hidden md:inline text-slate-700">|</span>
-            <a href="mailto:mesjidpriyayikelurahan@gmail.com" className="flex items-center gap-1 text-slate-300 hover:text-white transition-colors">
-              <Mail className="w-3.5 h-3.5 text-blue-400 shrink-0" />
-              <span>mesjidpriyayikelurahan@gmail.com</span>
+            <span className="text-gray-600">|</span>
+            <a href="mailto:mesjidpriyayikelurahan@gmail.com" className="flex items-center gap-1.5 hover:text-white transition-colors">
+              <Mail className="w-3.5 h-3.5" />
+              mesjidpriyayikelurahan@gmail.com
             </a>
           </div>
-
-          <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1 text-emerald-400 font-semibold text-[11px]">
-              <ShieldCheck className="w-3.5 h-3.5" /> Portal Pelayanan Publik Resmi
-            </span>
-            <span className="text-slate-700">|</span>
-            <a href="tel:112" className="text-slate-300 hover:text-white flex items-center gap-1 text-[11px]">
-              <Phone className="w-3.5 h-3.5 text-amber-400" /> Panggilan Darurat: 112
-            </a>
-          </div>
+          <a href="tel:085694083400" className="flex items-center gap-1.5 hover:text-white transition-colors">
+            <Phone className="w-3.5 h-3.5" />
+            <span>085694083400</span>
+          </a>
         </div>
       </div>
 
       {/* Main Navbar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
           
-          {/* Logo & Emblem */}
-          <Link href="/" className="flex items-center gap-3.5 group">
-            <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 p-1 flex items-center justify-center shadow-sm group-hover:border-amber-400 transition-colors shrink-0">
-              <img src="/logo.jpeg" alt="Logo Kelurahan Mesjid Priyayi" className="w-full h-full object-contain" />
-            </div>
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-3">
+            <img src="/logo.jpeg" alt="Logo" className="w-10 h-10 rounded-lg object-contain" />
             <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-base sm:text-lg text-slate-900 tracking-tight">KELURAHAN MESJID PRIYAYI</span>
-              </div>
-              <p className="text-xs text-slate-500 font-medium">Kec. Kasemen, Kota Serang - Banten</p>
+              <div className="font-bold text-gray-900 text-[15px] leading-tight">Kelurahan Mesjid Priyayi</div>
+              <div className="text-[12px] text-gray-500">Kec. Kasemen, Kota Serang</div>
             </div>
           </Link>
 
-          {/* Operational Status Pill */}
-          <div className="hidden xl:block">
-            <OperationalBadge />
-          </div>
-
-          {/* Desktop Nav Actions */}
-          <div className="hidden md:flex items-center gap-6">
-            <Link
-              href="/"
-              className="text-slate-700 hover:text-blue-900 font-semibold text-xs sm:text-sm transition-colors py-2"
-            >
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center gap-1">
+            <Link href="/" className="px-3 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors">
               Beranda
             </Link>
-
-            <Link
-              href="/#profil"
-              className="text-slate-700 hover:text-blue-900 font-semibold text-xs sm:text-sm transition-colors py-2"
-            >
-              Profil & Visi Misi
+            <Link href="/#profil" className="px-3 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors">
+              Profil
             </Link>
-
-            <Link
-              href="/#struktur"
-              className="flex items-center gap-1 text-slate-700 hover:text-blue-900 font-semibold text-xs sm:text-sm transition-colors py-2"
-            >
-              <Users className="w-4 h-4 text-amber-600" />
+            <Link href="/#struktur" className="px-3 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors">
               Struktur Organisasi
             </Link>
-
-            <Link
-              href="/tracking"
-              className="flex items-center gap-1 text-slate-700 hover:text-blue-900 font-semibold text-xs sm:text-sm transition-colors py-2"
-            >
-              <Search className="w-4 h-4 text-blue-700" />
-              Tracking Surat
+            <Link href="/tracking" className="px-3 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors">
+              Lacak Surat
             </Link>
 
-            {/* Dropdown Buat Pengajuan */}
-            <div className="relative">
+            <div className="relative ml-2">
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 onBlur={() => setTimeout(() => setDropdownOpen(false), 200)}
-                className="btn-emerald text-white text-xs sm:text-sm font-semibold px-4 sm:px-5 py-2.5 rounded-xl flex items-center gap-2 shadow-sm"
+                className="btn-emerald flex items-center gap-1.5 text-sm"
               >
-                <span>Ajukan Surat</span>
+                Ajukan Surat
                 <ChevronDown className={`w-4 h-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {dropdownOpen && (
-                <div className="absolute right-0 mt-2 w-72 bg-white rounded-2xl border border-slate-200 shadow-xl py-2 space-y-1 z-50 animate-in fade-in duration-150">
-                  <div className="px-4 py-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
-                    Pilih Kategori Surat:
-                  </div>
-
-                  <Link
-                    href="/pengajuan/sktm"
-                    className="flex items-center gap-3 px-4 py-3 text-xs text-slate-700 hover:bg-slate-50 transition-colors"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
-                      <FileText className="w-4 h-4" />
-                    </div>
+                <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg border border-gray-200 shadow-lg py-1 z-50">
+                  <Link href="/pengajuan/sktm" className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                    <FileText className="w-4 h-4 text-green-700" />
                     <div>
-                      <div className="font-bold text-slate-900">SKTM</div>
-                      <div className="text-[11px] text-slate-500">Surat Keterangan Tidak Mampu</div>
+                      <div className="font-semibold text-gray-900">SKTM</div>
+                      <div className="text-xs text-gray-500">Surat Keterangan Tidak Mampu</div>
                     </div>
                   </Link>
-
-                  <Link
-                    href="/pengajuan/domisili"
-                    className="flex items-center gap-3 px-4 py-3 text-xs text-slate-700 hover:bg-slate-50 transition-colors"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
-                      <Home className="w-4 h-4" />
-                    </div>
+                  <Link href="/pengajuan/domisili" className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                    <Home className="w-4 h-4 text-blue-700" />
                     <div>
-                      <div className="font-bold text-slate-900">Surat Domisili</div>
-                      <div className="text-[11px] text-slate-500">Surat Tempat Tinggal Sementara</div>
+                      <div className="font-semibold text-gray-900">Surat Domisili</div>
+                      <div className="text-xs text-gray-500">Keterangan Tempat Tinggal</div>
                     </div>
                   </Link>
-
-                  <Link
-                    href="/pengajuan/kematian"
-                    className="flex items-center gap-3 px-4 py-3 text-xs text-slate-700 hover:bg-slate-50 transition-colors"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center shrink-0">
-                      <UserCheck className="w-4 h-4" />
-                    </div>
+                  <Link href="/pengajuan/kematian" className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                    <UserCheck className="w-4 h-4 text-gray-700" />
                     <div>
-                      <div className="font-bold text-slate-900">Surat Kematian</div>
-                      <div className="text-[11px] text-slate-500">Surat Pelaporan Kematian Warga</div>
+                      <div className="font-semibold text-gray-900">Surat Kematian</div>
+                      <div className="text-xs text-gray-500">Pelaporan Kematian Warga</div>
                     </div>
                   </Link>
                 </div>
               )}
             </div>
+          </nav>
 
-          </div>
-
-          {/* Mobile Menu Toggle */}
-          <div className="flex items-center gap-3 md:hidden">
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200"
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
+          {/* Mobile Toggle */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 rounded-md text-gray-600 hover:bg-gray-100"
+            aria-label="Menu"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-slate-200 px-4 pt-3 pb-6 space-y-4 shadow-lg animate-in fade-in duration-200">
-          <div className="pt-2">
-            <OperationalBadge />
-          </div>
-
-          <div className="space-y-1">
-            <Link
-              href="/"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block font-semibold text-slate-800 hover:text-blue-900 text-sm py-2.5 border-b border-slate-100"
-            >
-              Beranda Utama
-            </Link>
-            <Link
-              href="/#profil"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block font-semibold text-slate-800 hover:text-blue-900 text-sm py-2.5 border-b border-slate-100"
-            >
-              Profil Kelurahan
-            </Link>
-            <Link
-              href="/#struktur"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block font-semibold text-slate-800 hover:text-blue-900 text-sm py-2.5 border-b border-slate-100"
-            >
-              Struktur Organisasi
-            </Link>
-            <Link
-              href="/tracking"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block font-semibold text-slate-800 hover:text-blue-900 text-sm py-2.5 border-b border-slate-100"
-            >
-              Tracking Status Pengajuan Surat
-            </Link>
-          </div>
-
-          <div className="pt-2 space-y-2">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Pilih Jenis Surat:</span>
-            <Link
-              href="/pengajuan/sktm"
-              onClick={() => setMobileMenuOpen(false)}
-              className="natural-card p-3 font-bold text-emerald-800 text-sm block bg-emerald-50 border-emerald-200"
-            >
-              📄 1. Surat Keterangan Tidak Mampu (SKTM)
-            </Link>
-            <Link
-              href="/pengajuan/domisili"
-              onClick={() => setMobileMenuOpen(false)}
-              className="natural-card p-3 font-bold text-blue-800 text-sm block bg-blue-50 border-blue-200"
-            >
-              🏠 2. Surat Keterangan Domisili
-            </Link>
-            <Link
-              href="/pengajuan/kematian"
-              onClick={() => setMobileMenuOpen(false)}
-              className="natural-card p-3 font-bold text-rose-800 text-sm block bg-rose-50 border-rose-200"
-            >
-              👤 3. Surat Keterangan Kematian
-            </Link>
+        <div className="md:hidden border-t border-gray-200 bg-white px-4 py-4 space-y-1">
+          <Link href="/" onClick={() => setMobileMenuOpen(false)} className="block py-2.5 text-sm text-gray-700 hover:text-gray-900 font-medium">Beranda</Link>
+          <Link href="/#profil" onClick={() => setMobileMenuOpen(false)} className="block py-2.5 text-sm text-gray-700 hover:text-gray-900 font-medium">Profil</Link>
+          <Link href="/#struktur" onClick={() => setMobileMenuOpen(false)} className="block py-2.5 text-sm text-gray-700 hover:text-gray-900 font-medium">Struktur Organisasi</Link>
+          <Link href="/tracking" onClick={() => setMobileMenuOpen(false)} className="block py-2.5 text-sm text-gray-700 hover:text-gray-900 font-medium">Lacak Surat</Link>
+          <div className="pt-3 border-t border-gray-100 space-y-1.5">
+            <Link href="/pengajuan/sktm" onClick={() => setMobileMenuOpen(false)} className="block py-2 px-3 text-sm font-medium text-green-800 bg-green-50 rounded-md">SKTM — Surat Tidak Mampu</Link>
+            <Link href="/pengajuan/domisili" onClick={() => setMobileMenuOpen(false)} className="block py-2 px-3 text-sm font-medium text-blue-800 bg-blue-50 rounded-md">Surat Domisili</Link>
+            <Link href="/pengajuan/kematian" onClick={() => setMobileMenuOpen(false)} className="block py-2 px-3 text-sm font-medium text-gray-800 bg-gray-50 rounded-md">Surat Kematian</Link>
           </div>
         </div>
       )}
