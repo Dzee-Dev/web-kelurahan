@@ -1,14 +1,13 @@
 {
   "name": "web-kelurahan-backend",
-  "version": "1.0.0",
-  "description": "Backend API untuk Sistem Pelaporan Web Kelurahan",
+  "version": "2.0.0",
+  "description": "Backend API Sistem Pelayanan Web Kelurahan Mesjid Priyayi (Self-Hosted VPS)",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
     "dev": "node --watch src/index.js"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.49.0",
     "axios": "^1.7.0",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
@@ -19,8 +18,10 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "pdfkit": "^0.19.1",
+    "pg": "^8.13.0",
+    "qrcode-terminal": "^0.12.0",
     "uuid": "^11.0.0",
-    "ws": "^8.21.1"
+    "whatsapp-web.js": "^1.26.0"
   },
   "engines": {
     "node": ">=18.0.0"

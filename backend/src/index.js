@@ -4,36 +4,33 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const path = require('path');
 
 const pengajuanRoutes = require('./routes/pengajuan.routes');
-const webhookRoutes = require('./routes/webhook.routes');
 const chatRoutes = require('./routes/chat.routes');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
+const { initWhatsAppBot, getBotStatus } = require('./services/waBot');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ─── Security & Logging ─────────────────────────────────────
-app.use(helmet());
+app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 app.use(morgan('dev'));
 
 // ─── CORS ────────────────────────────────────────────────────
 app.use(cors({
   origin: process.env.FRONTEND_URL || '*',
-  methods: ['GET', 'POST', 'PATCH'],
+  methods: ['GET', 'POST', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
 // ─── Body Parsing ────────────────────────────────────────────
-// Note: webhook route needs raw body for signature verification,
-// so we parse JSON only for non-webhook routes
-app.use((req, res, next) => {
-  if (req.path.startsWith('/webhook')) {
-    return next();
-  }
-  express.json()(req, res, next);
-});
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// ─── Static Files (uploads) ──────────────────────────────────
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 // ─── Health Check ────────────────────────────────────────────
 app.get('/health', (req, res) => {
@@ -41,13 +38,18 @@ app.get('/health', (req, res) => {
     status: 'ok',
     service: 'web-kelurahan-backend',
     timestamp: new Date().toISOString(),
+    whatsapp: getBotStatus(),
   });
 });
 
-// ─── Routes ──────────────────────────────────────────────────
+// ─── API Routes ──────────────────────────────────────────────
 app.use('/api/pengajuan', pengajuanRoutes);
 app.use('/api/chat', chatRoutes);
-app.use('/webhook', webhookRoutes);
+
+// ─── WA Bot Status API ───────────────────────────────────────
+app.get('/api/wa-status', (req, res) => {
+  res.json({ success: true, data: getBotStatus() });
+});
 
 // ─── Error Handling ──────────────────────────────────────────
 app.use(notFoundHandler);
@@ -55,10 +57,18 @@ app.use(errorHandler);
 
 // ─── Start Server ────────────────────────────────────────────
 app.listen(PORT, () => {
-  console.log(`\n🏛️  Web Kelurahan Backend`);
-  console.log(`   Server running on http://localhost:${PORT}`);
-  console.log(`   Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`   Health check: http://localhost:${PORT}/health\n`);
+  console.log(`\n\ud83c\udfdb\ufe0f  Web Kelurahan Backend (Self-Hosted VPS)`);
+  console.log(`   Server: http://localhost:${PORT}`);
+  console.log(`   Env: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`   Health: http://localhost:${PORT}/health`);
+  console.log(`   Uploads: http://localhost:${PORT}/uploads/\n`);
+
+  // Initialize WhatsApp Bot
+  if (process.env.ENABLE_WA_BOT !== 'false') {
+    initWhatsAppBot();
+  } else {
+    console.log('   \u26a0\ufe0f WhatsApp Bot disabled (ENABLE_WA_BOT=false)\n');
+  }
 });
 
 module.exports = app;

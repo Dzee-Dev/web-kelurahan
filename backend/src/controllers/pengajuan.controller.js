@@ -1,7 +1,8 @@
 const pengajuanService = require('../services/pengajuan.service');
 const storageService = require('../services/storage.service');
 const { generatePengajuanPdf } = require('../services/pdf.service');
-const { buildWaMessage, buildWaDeepLink } = require('../utils/waMessageBuilder');
+const { sendMessage } = require('../services/waBot');
+const { buildWaMessage } = require('../utils/waMessageBuilder');
 const { LABEL_JENIS_SURAT } = require('../config/constants');
 const { AppError } = require('../middleware/errorHandler');
 
@@ -21,7 +22,7 @@ async function submitPengajuan(req, res, next) {
       data_tambahan,
     } = req.body;
 
-    // 1. Upload semua dokumen foto/pdf yang di-attach warga ke Supabase Storage
+    // 1. Upload semua dokumen ke local storage
     const timestamp = Date.now();
     const folder = `${jenis_surat}/${nik_pemohon}_${timestamp}`;
 
@@ -30,7 +31,7 @@ async function submitPengajuan(req, res, next) {
       dokumenUrls = await storageService.uploadMultipleFiles(req.files, folder);
     }
 
-    // 2. Insert data awal ke database
+    // 2. Insert data ke database
     const pengajuan = await pengajuanService.createPengajuan({
       jenis_surat,
       nama_pemohon,
@@ -42,7 +43,7 @@ async function submitPengajuan(req, res, next) {
       dokumen_urls: dokumenUrls,
     });
 
-    // 3. Generate PDF Bukti Tanda Terima Resmi
+    // 3. Generate PDF Bukti Tanda Terima
     let pdfUrl = null;
     try {
       const pdfBuffer = await generatePengajuanPdf(pengajuan);
@@ -50,26 +51,33 @@ async function submitPengajuan(req, res, next) {
       pdfUrl = await storageService.uploadPdfBuffer(pdfBuffer, pdfPath);
 
       if (pdfUrl) {
-        // Simpan PDF URL ke dokumen_urls
         dokumenUrls.pdf_bukti_pengajuan = {
           url: pdfUrl,
           originalName: `Bukti_Pengajuan_${jenis_surat.toUpperCase()}_${nik_pemohon}.pdf`,
         };
-        // Update di DB
-        await pengajuanService.updateStatus(pengajuan.id, pengajuan.status);
+        await pengajuanService.updateDokumenUrls(pengajuan.id, dokumenUrls);
       }
     } catch (pdfErr) {
-      console.error('⚠️ Gagal membuat PDF bukti pengajuan:', pdfErr.message);
+      console.error('\u26a0\ufe0f Gagal membuat PDF:', pdfErr.message);
     }
 
     pengajuan.dokumen_urls = dokumenUrls;
 
-    // 4. Generate pesan WA dan deep link (termasuk link PDF)
-    const waMessage = buildWaMessage(pengajuan);
-    const adminPhone = process.env.WABA_ADMIN_PHONE || '6285694083400';
-    const waDeepLink = buildWaDeepLink(adminPhone, waMessage);
+    // 4. Kirim notifikasi ke WhatsApp Admin via Bot
+    try {
+      const waMessage = buildWaMessage(pengajuan);
+      const adminPhone = process.env.WA_ADMIN_PHONE || '6285694083400';
+      await sendMessage(adminPhone, waMessage);
+    } catch (waErr) {
+      console.error('\u26a0\ufe0f Gagal kirim WA:', waErr.message);
+    }
 
-    // 5. Response
+    // 5. Build WA deep link fallback (untuk warga klik manual)
+    const adminPhone = process.env.WA_ADMIN_PHONE || '6285694083400';
+    const waMessage = buildWaMessage(pengajuan);
+    const waDeepLink = `https://wa.me/${adminPhone}?text=${encodeURIComponent(waMessage)}`;
+
+    // 6. Response
     res.status(201).json({
       success: true,
       message: `Pengajuan ${LABEL_JENIS_SURAT[jenis_surat]} berhasil disubmit`,
@@ -90,7 +98,7 @@ async function submitPengajuan(req, res, next) {
 
 /**
  * GET /api/pengajuan/:id
- * Cek status pengajuan berdasarkan ID (warga bisa cek status & download PDF)
+ * Cek status pengajuan (warga tracking)
  */
 async function getStatus(req, res, next) {
   try {
@@ -118,8 +126,22 @@ async function getStatus(req, res, next) {
 }
 
 /**
+ * GET /api/pengajuan
+ * List semua pengajuan (admin)
+ */
+async function listPengajuan(req, res, next) {
+  try {
+    const { status, jenis_surat, page, limit } = req.query;
+    const result = await pengajuanService.getAllPengajuan({ status, jenis_surat, page, limit });
+    res.json({ success: true, ...result });
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
  * PATCH /api/pengajuan/:id/status
- * Update status pengajuan (admin operation: pending | processed | completed | rejected)
+ * Update status pengajuan (admin)
  */
 async function updateStatusHandler(req, res, next) {
   try {
@@ -133,6 +155,21 @@ async function updateStatusHandler(req, res, next) {
 
     const updated = await pengajuanService.updateStatus(id, status);
 
+    // Notifikasi ke warga via WA Bot
+    try {
+      const statusLabels = {
+        pending: 'Menunggu Verifikasi',
+        processed: 'Sedang Diproses',
+        completed: 'Selesai \u2014 Silakan ambil surat di kantor kelurahan',
+        rejected: 'Ditolak \u2014 Silakan hubungi admin kelurahan',
+      };
+      const noHp = updated.no_hp.replace(/^0/, '62').replace(/[^0-9]/g, '');
+      const msg = `*Kelurahan Mesjid Priyayi*\n\nYth. ${updated.nama_pemohon},\nStatus pengajuan surat Anda telah diperbarui:\n\n*Status:* ${statusLabels[status]}\n*Kode Tracking:* ${updated.id}\n\nTerima kasih.`;
+      await sendMessage(noHp, msg);
+    } catch (waErr) {
+      console.error('\u26a0\ufe0f Gagal kirim notifikasi status ke warga:', waErr.message);
+    }
+
     res.json({
       success: true,
       message: `Status pengajuan berhasil diubah menjadi "${status}"`,
@@ -143,4 +180,4 @@ async function updateStatusHandler(req, res, next) {
   }
 }
 
-module.exports = { submitPengajuan, getStatus, updateStatusHandler };
+module.exports = { submitPengajuan, getStatus, listPengajuan, updateStatusHandler };

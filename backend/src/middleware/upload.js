@@ -2,8 +2,9 @@ const multer = require('multer');
 const { UPLOAD_CONFIG } = require('../config/constants');
 
 /**
- * Multer configuration — memory storage sehingga file buffer
- * bisa langsung di-upload ke Supabase Storage tanpa menyimpan ke disk.
+ * Multer configuration — memory storage
+ * File disimpan di memory buffer dulu, lalu storage.service.js
+ * yang menulisnya ke disk agar path bisa dikontrol.
  */
 const storage = multer.memoryStorage();
 

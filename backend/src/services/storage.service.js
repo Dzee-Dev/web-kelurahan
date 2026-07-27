@@ -1,47 +1,52 @@
-const supabase = require('../config/supabase');
-const { UPLOAD_CONFIG } = require('../config/constants');
-const { v4: uuidv4 } = require('uuid');
 const path = require('path');
+const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
+const { UPLOAD_CONFIG } = require('../config/constants');
+
+// Base upload directory
+const UPLOAD_DIR = path.join(__dirname, '..', '..', 'uploads');
+
+// Ensure upload directory exists
+if (!fs.existsSync(UPLOAD_DIR)) {
+  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+}
 
 /**
- * Upload satu file ke Supabase Storage
- * @param {Object} file - Multer file object (buffer, originalname, mimetype)
- * @param {string} folder - Subfolder di bucket (misal: sktm/nik_timestamp)
- * @returns {Promise<{path: string, url: string}>}
+ * Get the public URL for an uploaded file
+ */
+function getFileUrl(relativePath) {
+  const baseUrl = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 3000}`;
+  return `${baseUrl}/uploads/${relativePath}`;
+}
+
+/**
+ * Upload satu file ke local disk
  */
 async function uploadFile(file, folder) {
   const ext = path.extname(file.originalname).toLowerCase();
   const uniqueName = `${uuidv4()}${ext}`;
-  const filePath = `${folder}/${uniqueName}`;
+  const folderPath = path.join(UPLOAD_DIR, folder);
+  const filePath = path.join(folderPath, uniqueName);
 
-  const { data, error } = await supabase.storage
-    .from(UPLOAD_CONFIG.BUCKET_NAME)
-    .upload(filePath, file.buffer, {
-      contentType: file.mimetype,
-      upsert: false,
-    });
-
-  if (error) {
-    throw new Error(`Gagal upload file "${file.originalname}": ${error.message}`);
+  // Ensure folder exists
+  if (!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath, { recursive: true });
   }
 
-  // Generate public URL
-  const { data: urlData } = supabase.storage
-    .from(UPLOAD_CONFIG.BUCKET_NAME)
-    .getPublicUrl(data.path);
+  // Write file from buffer
+  fs.writeFileSync(filePath, file.buffer);
+
+  const relativePath = `${folder}/${uniqueName}`;
 
   return {
-    path: data.path,
-    url: urlData.publicUrl,
+    path: relativePath,
+    url: getFileUrl(relativePath),
     originalName: file.originalname,
   };
 }
 
 /**
  * Upload multiple files (grouped by field name)
- * @param {Object} files - req.files dari multer (object keyed by field name)
- * @param {string} baseFolder - Base folder path (misal: sktm/3201xxxx_1700000)
- * @returns {Promise<Object>} - Object dengan key = fieldName, value = {url, originalName}
  */
 async function uploadMultipleFiles(files, baseFolder) {
   const results = {};
@@ -57,29 +62,23 @@ async function uploadMultipleFiles(files, baseFolder) {
 }
 
 /**
- * Upload Buffer PDF buatan backend ke Supabase Storage
- * @param {Buffer} pdfBuffer - Buffer PDF
- * @param {string} filePath - Target path di bucket
- * @returns {Promise<string>} - Public URL file PDF
+ * Upload Buffer PDF ke local disk
  */
 async function uploadPdfBuffer(pdfBuffer, filePath) {
-  const { data, error } = await supabase.storage
-    .from(UPLOAD_CONFIG.BUCKET_NAME)
-    .upload(filePath, pdfBuffer, {
-      contentType: 'application/pdf',
-      upsert: true,
-    });
+  try {
+    const fullPath = path.join(UPLOAD_DIR, filePath);
+    const dir = path.dirname(fullPath);
 
-  if (error) {
-    console.error('❌ Gagal upload PDF ke storage:', error.message);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+
+    fs.writeFileSync(fullPath, pdfBuffer);
+    return getFileUrl(filePath);
+  } catch (err) {
+    console.error('\u274C Gagal menyimpan PDF:', err.message);
     return null;
   }
-
-  const { data: urlData } = supabase.storage
-    .from(UPLOAD_CONFIG.BUCKET_NAME)
-    .getPublicUrl(data.path);
-
-  return urlData.publicUrl;
 }
 
-module.exports = { uploadFile, uploadMultipleFiles, uploadPdfBuffer };
+module.exports = { uploadFile, uploadMultipleFiles, uploadPdfBuffer, UPLOAD_DIR };
