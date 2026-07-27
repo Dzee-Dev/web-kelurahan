@@ -7,6 +7,8 @@ let client = null;
 let isReady = false;
 let lastQr = null;
 
+let hasRequestedPairing = false;
+
 /**
  * Inisialisasi WhatsApp Bot Client
  */
@@ -39,8 +41,9 @@ function initWhatsAppBot() {
     qrcode.generate(qr, { small: true });
     console.log('\n');
 
-    // Solusi Anti-Gagal: Minta Kode Pairing (8 Digit PIN) untuk Tautkan via Nomor HP
-    if (process.env.WA_ADMIN_PHONE) {
+    // Solusi Anti-Gagal: Minta Kode Pairing (8 Digit PIN) hanya 1x & Tahan selama 3 Menit
+    if (process.env.WA_ADMIN_PHONE && !hasRequestedPairing) {
+      hasRequestedPairing = true;
       try {
         const cleanPhone = process.env.WA_ADMIN_PHONE.replace(/[^0-9]/g, '');
         const phoneWithCountry = cleanPhone.startsWith('0') ? '62' + cleanPhone.slice(1) : cleanPhone;
@@ -51,7 +54,13 @@ function initWhatsAppBot() {
         console.log(`\ud83d\udd11 ==========================================\n`);
       } catch (err) {
         console.log('Gagal membuat kode pairing otomatis:', err.message);
+        hasRequestedPairing = false;
       }
+
+      // Tahan kode selama 3 menit (180.000 ms) agar tidak berganti-ganti saat mengetik
+      setTimeout(() => {
+        hasRequestedPairing = false;
+      }, 180000);
     }
   });
 
