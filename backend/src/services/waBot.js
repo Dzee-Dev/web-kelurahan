@@ -83,34 +83,53 @@ function initWhatsAppBot() {
     }, 5000);
   });
 
-  // Auto-reply pesan masuk
-  client.on('message', async (message) => {
-    // Abaikan pesan dari group, status, dan broadcast
-    if (message.isGroupMsg || message.isStatus || message.broadcast) return;
+  // Auto-reply pesan masuk (Pengajuan & Salam/Bantuan)
+  const handleIncomingMessage = async (message) => {
+    // Abaikan jika pesan dari group, status, broadcast, atau dikirim oleh bot itu sendiri
+    if (message.isGroupMsg || message.isStatus || message.broadcast || message.fromMe) return;
 
     try {
-      const incomingText = message.body || '';
+      const incomingText = (message.body || '').trim();
+      if (!incomingText) return;
+
       console.log(`\ud83d\udce9 Pesan masuk dari ${message.from}: "${incomingText}"`);
 
-      // 1. Cek apakah ini adalah pesan pengajuan dari Web
       const textUpper = incomingText.toUpperCase();
-      if (textUpper.includes('PENGAJUAN SURAT') && textUpper.includes('TRACKING ID')) {
-        const inWorkHours = isOperationalHours();
-        const reply = inWorkHours ? PESAN_BOT.DALAM_JAM_OPERASIONAL : PESAN_BOT.LUAR_JAM_OPERASIONAL;
+      const inWorkHours = isOperationalHours();
+      let reply = null;
 
-        await message.reply(reply);
-        console.log(`\ud83d\udce4 Auto-reply terkirim ke ${message.from} (${inWorkHours ? 'Dalam Jam Kerja' : 'Luar Jam Kerja'})`);
-        return; 
+      // 1. Pesan pengajuan dari Web
+      if (textUpper.includes('PENGAJUAN SURAT') || textUpper.includes('TRACKING ID') || textUpper.includes('TRACKING')) {
+        reply = inWorkHours ? PESAN_BOT.DALAM_JAM_OPERASIONAL : PESAN_BOT.LUAR_JAM_OPERASIONAL;
+      } 
+      // 2. Pesan salam / halo / tes / info / bantuan
+      else if (
+        textUpper.includes('HALO') || textUpper.includes('HAI') || 
+        textUpper.includes('ASSALAMU') || textUpper.includes('TES') || 
+        textUpper.includes('HELP') || textUpper.includes('BANTU') ||
+        textUpper.includes('SURAT') || textUpper.includes('INFO') ||
+        textUpper.includes('MANA') || textUpper.includes('PAGI') ||
+        textUpper.includes('SIANG') || textUpper.includes('SORE')
+      ) {
+        reply = inWorkHours
+          ? `👋 *Selamat Datang di Pelayanan Kelurahan Mesjid Priyayi*\n\nAda yang bisa kami bantu? Untuk mengajukan surat kependudukan secara online (SKTM, Surat Domisili, Surat Kematian), silakan kunjungi portal resmi kami:\n🌐 https://web-kelurahan.vercel.app\n\n📌 *Jam Pelayanan Kantor:* Senin – Jumat (08.00 – 15.00 WIB)`
+          : `👋 *Selamat Datang di Pelayanan Kelurahan Mesjid Priyayi*\n\nMohon maaf, saat ini kantor sedang *di luar jam operasional*. Pesan Anda akan dibaca oleh petugas pada hari kerja berikutnya.\n\nAnda tetap dapat membuat pengajuan surat online 24 jam melalui portal resmi kami:\n🌐 https://web-kelurahan.vercel.app\n\n📌 *Jam Pelayanan Kantor:* Senin – Jumat (08.00 – 15.00 WIB)`;
       }
 
-      // Jika pesan biasa (bukan format web), bot akan DIAM (tidak membalas apapun)
-      // Ini mencegah bot membalas pesan pribadi (teman/keluarga) dan mencegah akun diblokir.
-      console.log(`\ud83d\udeab Pesan diabaikan (bukan format pengajuan)`);
+      if (reply) {
+        await message.reply(reply);
+        console.log(`\ud83d\udce4 Auto-reply terkirim ke ${message.from} (${inWorkHours ? 'Dalam Jam Kerja' : 'Luar Jam Kerja'})`);
+      } else {
+        console.log(`\ud83d\udeab Pesan diabaikan (bukan format pengajuan atau salam)`);
+      }
 
     } catch (err) {
       console.error('\u274C Error auto-reply:', err.message);
     }
-  });
+  };
+
+  client.on('message', handleIncomingMessage);
+  client.on('message_create', handleIncomingMessage);
 
   console.log('\ud83d\ude80 Initializing WhatsApp Bot...');
   client.initialize();
