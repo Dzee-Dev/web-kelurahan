@@ -1,5 +1,7 @@
-const { Client, LocalAuth } = require('whatsapp-web.js');
+const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
+const path = require('path');
+const fs = require('fs');
 const { generateAiResponse } = require('./ai.service');
 const { isOperationalHours } = require('./whatsapp.service');
 const { PESAN_BOT } = require('../config/constants');
@@ -130,8 +132,14 @@ function initWhatsAppBot() {
       }
 
       if (reply) {
-        await message.reply(reply);
-        console.log(`\ud83d\udce4 Auto-reply terkirim ke ${message.from} (${inWorkHours ? 'Dalam Jam Kerja' : 'Luar Jam Kerja'})`);
+        const logoPath = path.join(__dirname, '..', 'assets', 'logo-serang.png');
+        if (fs.existsSync(logoPath)) {
+          const media = MessageMedia.fromFilePath(logoPath);
+          await client.sendMessage(message.from, media, { caption: reply });
+        } else {
+          await message.reply(reply);
+        }
+        console.log(`\ud83d\udce4 Auto-reply + Gambar Logo terkirim ke ${message.from} (${inWorkHours ? 'Dalam Jam Kerja' : 'Luar Jam Kerja'})`);
       } else {
         console.log(`\ud83d\udeab Pesan diabaikan (bukan format pengajuan atau salam)`);
       }
