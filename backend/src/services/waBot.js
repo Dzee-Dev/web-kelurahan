@@ -83,10 +83,23 @@ function initWhatsAppBot() {
     }, 5000);
   });
 
+  const processedMessageIds = new Set();
+
   // Auto-reply pesan masuk (Pengajuan & Salam/Bantuan)
   const handleIncomingMessage = async (message) => {
     // Abaikan jika pesan dari group, status, broadcast, atau dikirim oleh bot itu sendiri
     if (message.isGroupMsg || message.isStatus || message.broadcast || message.fromMe) return;
+
+    // Cegah balasan ganda dengan mendeduplikasi Message ID
+    const msgId = message.id?._serialized || message.id?.id || `${message.from}_${message.timestamp}`;
+    if (processedMessageIds.has(msgId)) return;
+    processedMessageIds.add(msgId);
+
+    // Batasi ukuran set agar tidak menumpuk memori
+    if (processedMessageIds.size > 2000) {
+      const firstItem = processedMessageIds.values().next().value;
+      processedMessageIds.delete(firstItem);
+    }
 
     try {
       const incomingText = (message.body || '').trim();
@@ -129,7 +142,6 @@ function initWhatsAppBot() {
   };
 
   client.on('message', handleIncomingMessage);
-  client.on('message_create', handleIncomingMessage);
 
   console.log('\ud83d\ude80 Initializing WhatsApp Bot...');
   client.initialize();
