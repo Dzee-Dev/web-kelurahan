@@ -11,12 +11,12 @@ const JAM_OPERASIONAL = {
   HARI_KERJA: [1, 2, 3, 4, 5],
 };
 
-// Pesan auto-reply WhatsApp
+// Pesan auto-reply WhatsApp berdasarkan jam operasional
 const PESAN_BOT = {
   DALAM_JAM_OPERASIONAL:
-    'Terima kasih, laporan Anda telah kami terima. Admin kami akan segera merespons dan memproses pengajuan Anda.',
+    '✅ *Pengajuan Diterima (Jam Operasional)*\n\nTerima kasih. Berkas pengajuan surat Anda telah masuk ke sistem kami dan sedang diproses/diverifikasi oleh Petugas Kelurahan Mesjid Priyayi.\n\n📌 *Jam Pelayanan Kantor:* Senin – Jumat (08.00 – 15.00 WIB)\n\nAnda dapat memantau status surat Anda secara berkala melalui menu Tracking di website kami.',
   LUAR_JAM_OPERASIONAL:
-    'Mohon maaf, saat ini di luar jam operasional kantor. Pesan Anda telah kami terima dan akan diproses pada hari kerja berikutnya mulai pukul 08:00 WIB.',
+    '⏳ *Pengajuan Diterima (Luar Jam Operasional)*\n\nTerima kasih. Berkas pengajuan surat Anda telah tersimpan di sistem kami.\n\n⚠️ *Catatan:* Saat ini kantor sedang di luar jam operasional. Pengajuan Anda akan diproses oleh petugas pada hari kerja berikutnya mulai pukul 08.00 WIB.\n\n📌 *Jam Pelayanan Kantor:* Senin – Jumat (08.00 – 15.00 WIB)\n\nAnda dapat memantau status surat Anda secara berkala melalui menu Tracking di website.',
 };
 
 // Jenis surat yang tersedia

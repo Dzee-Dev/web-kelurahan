@@ -2,6 +2,7 @@ const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { generateAiResponse } = require('./ai.service');
 const { isOperationalHours } = require('./whatsapp.service');
+const { PESAN_BOT } = require('../config/constants');
 
 let client = null;
 let isReady = false;
@@ -88,9 +89,11 @@ function initWhatsAppBot() {
       // 1. Cek apakah ini adalah pesan pengajuan dari Web
       const textUpper = incomingText.toUpperCase();
       if (textUpper.includes('PENGAJUAN SURAT') && textUpper.includes('TRACKING ID')) {
-        const reply = '✅ *Terima Kasih!*\nBerkas pengajuan surat Anda telah masuk ke sistem kami dan akan segera diverifikasi oleh Admin Kelurahan.\n\nAnda dapat memantau status surat Anda secara berkala melalui menu Tracking di website kami.';
+        const inWorkHours = isOperationalHours();
+        const reply = inWorkHours ? PESAN_BOT.DALAM_JAM_OPERASIONAL : PESAN_BOT.LUAR_JAM_OPERASIONAL;
+
         await message.reply(reply);
-        console.log(`\ud83d\udce4 Auto-reply penerimaan surat terkirim ke ${message.from}`);
+        console.log(`\ud83d\udce4 Auto-reply terkirim ke ${message.from} (${inWorkHours ? 'Dalam Jam Kerja' : 'Luar Jam Kerja'})`);
         return; 
       }
 
