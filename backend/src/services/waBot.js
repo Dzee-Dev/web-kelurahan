@@ -16,6 +16,10 @@ let hasRequestedPairing = false;
 function initWhatsAppBot() {
   client = new Client({
     authStrategy: new LocalAuth({ dataPath: '.wwebjs_auth' }),
+    webVersionCache: {
+      type: 'remote',
+      remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html',
+    },
     qrMaxRetries: 15, // 15 retries * ~20s = ~5 minutes
     puppeteer: {
       headless: 'new',
@@ -47,14 +51,16 @@ function initWhatsAppBot() {
   });
 
   client.on('authenticated', () => {
-    console.log('\ud83d\udd10 WhatsApp Bot authenticated');
+    console.log('🔐 WhatsApp Bot authenticated');
     // Debugging: ambil screenshot jika tersangkut lebih dari 15 detik
     setTimeout(async () => {
       if (!isReady && client.pupPage) {
         try {
-          console.log('\u26a0\ufe0f Mengambil screenshot layar WA Web untuk debugging...');
-          await client.pupPage.screenshot({ path: 'wa-debug.png' });
-          console.log('\u2705 Screenshot tersimpan sebagai wa-debug.png. Beritahu pengguna.');
+          const path = require('path');
+          const debugPath = path.join(__dirname, '..', '..', 'uploads', 'wa-debug.png');
+          console.log('⚠️ Mengambil screenshot layar WA Web untuk debugging...');
+          await client.pupPage.screenshot({ path: debugPath });
+          console.log('✅ Screenshot tersimpan di /uploads/wa-debug.png.');
         } catch (err) {
           console.error('Gagal mengambil screenshot', err);
         }
