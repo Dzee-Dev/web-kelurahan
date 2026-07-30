@@ -30,12 +30,16 @@ export default function AdminDashboard() {
   const [pagination, setPagination] = useState({ page: 1, totalPages: 1, total: 0 });
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && sessionStorage.getItem('admin_auth') !== 'true') {
-      router.push('/admin');
-      return;
-    }
-    fetchData();
-  }, [filter]);
+    const loadDashboard = async () => {
+      const sessionResponse = await fetch(`${API_BASE}/auth/session`, { cache: 'no-store' });
+      if (!sessionResponse.ok) {
+        router.replace('/admin');
+        return;
+      }
+      fetchData();
+    };
+    loadDashboard();
+  }, [filter, router]);
 
   const fetchData = async (page = 1) => {
     setLoading(true);
@@ -46,7 +50,7 @@ export default function AdminDashboard() {
       if (filter.status) params.set('status', filter.status);
       if (filter.jenis) params.set('jenis_surat', filter.jenis);
 
-      const res = await fetch(`${API_BASE}/pengajuan?${params}`);
+      const res = await fetch(`${API_BASE}/admin/pengajuan?${params}`);
       const result = await res.json();
 
       if (result.success) {
@@ -63,7 +67,7 @@ export default function AdminDashboard() {
     if (!confirm(`Ubah status menjadi "${STATUS_LABELS[newStatus].label}"?`)) return;
 
     try {
-      const res = await fetch(`${API_BASE}/pengajuan/${id}/status`, {
+      const res = await fetch(`${API_BASE}/admin/pengajuan/${id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),
@@ -77,9 +81,9 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleLogout = () => {
-    sessionStorage.removeItem('admin_auth');
-    router.push('/admin');
+  const handleLogout = async () => {
+    await fetch(`${API_BASE}/auth/logout`, { method: 'POST' });
+    router.replace('/admin');
   };
 
   const formatDate = (dateStr) => {

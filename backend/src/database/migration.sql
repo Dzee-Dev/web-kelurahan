@@ -26,14 +26,3 @@ CREATE INDEX IF NOT EXISTS idx_pengajuan_status ON pengajuan_surat(status);
 CREATE INDEX IF NOT EXISTS idx_pengajuan_jenis ON pengajuan_surat(jenis_surat);
 CREATE INDEX IF NOT EXISTS idx_pengajuan_nik ON pengajuan_surat(nik_pemohon);
 CREATE INDEX IF NOT EXISTS idx_pengajuan_created ON pengajuan_surat(created_at DESC);
-
--- 4. Tabel admin sederhana (proteksi PIN)
-CREATE TABLE IF NOT EXISTS admin_config (
-  id SERIAL PRIMARY KEY,
-  pin_hash VARCHAR(255) NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-);
-
--- 5. Insert PIN default: 123456 (hash bcrypt placeholder — akan di-hash oleh backend)
--- PIN default bisa diganti nanti via admin panel
-INSERT INTO admin_config (pin_hash) VALUES ('123456') ON CONFLICT DO NOTHING;

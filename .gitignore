@@ -19,6 +19,10 @@ dist/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.wwebjs_auth/
+uploads/
+wa-debug.png
+*.deb
 
 # OS Files
 .DS_Store

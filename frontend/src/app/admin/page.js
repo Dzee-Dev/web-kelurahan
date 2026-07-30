@@ -6,24 +6,32 @@ import { Lock } from 'lucide-react';
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [pin, setPin] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
-    // PIN sederhana disimpan di localStorage setelah verifikasi
-    // Untuk internal kelurahan, cukup PIN statis
-    const validPin = '123456'; // Bisa diganti nanti
-    
-    if (pin === validPin) {
-      sessionStorage.setItem('admin_auth', 'true');
+    try {
+      const response = await fetch('/api/proxy/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        setError(result.error?.message || 'Login gagal. Silakan coba lagi.');
+        return;
+      }
+
       router.push('/admin/dashboard');
-    } else {
-      setError('PIN salah. Silakan coba lagi.');
+    } catch {
+      setError('Server tidak dapat dihubungi. Silakan coba lagi.');
+    } finally {
       setLoading(false);
     }
   };
@@ -41,14 +49,15 @@ export default function AdminLoginPage() {
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">PIN Admin</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Password Admin</label>
             <input
               type="password"
-              placeholder="Masukkan PIN..."
-              value={pin}
-              onChange={(e) => setPin(e.target.value)}
+              placeholder="Masukkan password..."
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="natural-input w-full text-center text-lg tracking-widest"
-              maxLength={6}
+              minLength={10}
+              maxLength={128}
               required
               autoFocus
             />

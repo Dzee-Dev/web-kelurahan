@@ -24,13 +24,8 @@ const uploadFields = upload.fields(buildUploadFields());
 // POST /api/pengajuan — Submit pengajuan (warga)
 router.post('/', uploadFields, validatePengajuan, pengajuanController.submitPengajuan);
 
-// GET /api/pengajuan — List all pengajuan (admin)
-router.get('/', pengajuanController.listPengajuan);
-
 // GET /api/pengajuan/:id — Get status (warga tracking)
 router.get('/:id', pengajuanController.getStatus);
 
-// PATCH /api/pengajuan/:id/status — Update status (admin)
-router.patch('/:id/status', pengajuanController.updateStatusHandler);
 
 module.exports = router;

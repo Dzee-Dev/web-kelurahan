@@ -8,11 +8,14 @@ const path = require('path');
 
 const pengajuanRoutes = require('./routes/pengajuan.routes');
 const chatRoutes = require('./routes/chat.routes');
+const authRoutes = require('./routes/auth.routes');
+const adminRoutes = require('./routes/admin.routes');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 const { initWhatsAppBot, getBotStatus } = require('./services/waBot');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+app.set('trust proxy', 1);
 
 // ─── Security & Logging ─────────────────────────────────────
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
@@ -45,6 +48,8 @@ app.get('/health', (req, res) => {
 // ─── API Routes ──────────────────────────────────────────────
 app.use('/api/pengajuan', pengajuanRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
 
 // ─── WA Bot Status API ───────────────────────────────────────
 app.get('/api/wa-status', (req, res) => {

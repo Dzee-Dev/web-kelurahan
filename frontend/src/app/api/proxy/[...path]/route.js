@@ -14,6 +14,9 @@ async function handleProxy(req, { params }) {
     if (req.headers.get('content-type')) {
       headers.set('content-type', req.headers.get('content-type'));
     }
+    if (req.headers.get('cookie')) {
+      headers.set('cookie', req.headers.get('cookie'));
+    }
 
     const options = {
       method: req.method,
@@ -28,12 +31,22 @@ async function handleProxy(req, { params }) {
     const contentType = res.headers.get('content-type') || 'application/json';
     const data = await res.arrayBuffer();
 
-    return new NextResponse(data, {
+    const response = new NextResponse(data, {
       status: res.status,
       headers: {
         'content-type': contentType,
+        'cache-control': 'no-store',
       },
     });
+
+    const setCookies = typeof res.headers.getSetCookie === 'function'
+      ? res.headers.getSetCookie()
+      : [res.headers.get('set-cookie')].filter(Boolean);
+    for (const cookie of setCookies) {
+      response.headers.append('set-cookie', cookie);
+    }
+
+    return response;
   } catch (err) {
     console.error('Universal Proxy Error:', err.message);
     return NextResponse.json(

@@ -29,17 +29,21 @@ export default function AdminDetailPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && sessionStorage.getItem('admin_auth') !== 'true') {
-      router.push('/admin');
-      return;
-    }
-    fetchDetail();
-  }, [params.id]);
+    const loadDetail = async () => {
+      const sessionResponse = await fetch(`${API_BASE}/auth/session`, { cache: 'no-store' });
+      if (!sessionResponse.ok) {
+        router.replace('/admin');
+        return;
+      }
+      fetchDetail();
+    };
+    loadDetail();
+  }, [params.id, router]);
 
   const fetchDetail = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/pengajuan/${params.id}`);
+      const res = await fetch(`${API_BASE}/admin/pengajuan/${params.id}`);
       const result = await res.json();
       if (result.success) {
         setData(result.data);
@@ -54,7 +58,7 @@ export default function AdminDetailPage() {
     if (!confirm(`Ubah status menjadi "${STATUS_LABELS[newStatus].label}"?`)) return;
 
     try {
-      const res = await fetch(`${API_BASE}/pengajuan/${params.id}/status`, {
+      const res = await fetch(`${API_BASE}/admin/pengajuan/${params.id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),

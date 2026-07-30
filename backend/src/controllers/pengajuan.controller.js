@@ -130,6 +130,19 @@ async function getStatus(req, res, next) {
  * GET /api/pengajuan
  * List semua pengajuan (admin)
  */
+/**
+ * GET /api/admin/pengajuan/:id
+ * Detail lengkap pengajuan untuk admin terautentikasi.
+ */
+async function getPengajuanDetail(req, res, next) {
+  try {
+    const pengajuan = await pengajuanService.getPengajuanById(req.params.id);
+    res.json({ success: true, data: pengajuan });
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function listPengajuan(req, res, next) {
   try {
     const { status, jenis_surat, page, limit } = req.query;
@@ -181,4 +194,4 @@ async function updateStatusHandler(req, res, next) {
   }
 }
 
-module.exports = { submitPengajuan, getStatus, listPengajuan, updateStatusHandler };
+module.exports = { submitPengajuan, getStatus, getPengajuanDetail, listPengajuan, updateStatusHandler };
