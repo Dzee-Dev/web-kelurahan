@@ -62,7 +62,7 @@ function initWhatsAppBot() {
           const debugPath = path.join(__dirname, '..', '..', 'uploads', 'wa-debug.png');
           console.log('⚠️ Mengambil screenshot layar WA Web untuk debugging...');
           await client.pupPage.screenshot({ path: debugPath });
-          console.log('✅ Screenshot tersimpan di /uploads/wa-debug.png.');
+          console.log(`✅ Screenshot debug tersimpan lokal di ${debugPath}.`);
         } catch (err) {
           console.error('Gagal mengambil screenshot', err);
         }

@@ -30,13 +30,18 @@ async function handleProxy(req, { params }) {
     const res = await fetch(targetUrl, options);
     const contentType = res.headers.get('content-type') || 'application/json';
     const data = await res.arrayBuffer();
+    const responseHeaders = new Headers({
+      'content-type': contentType,
+      'cache-control': 'no-store',
+    });
+    const contentDisposition = res.headers.get('content-disposition');
+    if (contentDisposition) {
+      responseHeaders.set('content-disposition', contentDisposition);
+    }
 
     const response = new NextResponse(data, {
       status: res.status,
-      headers: {
-        'content-type': contentType,
-        'cache-control': 'no-store',
-      },
+      headers: responseHeaders,
     });
 
     const setCookies = typeof res.headers.getSetCookie === 'function'

@@ -200,13 +200,12 @@ export default function AdminDetailPage() {
               <h3 className="font-semibold text-gray-800 mb-3">📎 Dokumen Terlampir</h3>
               <div className="space-y-2">
                 {Object.entries(data.dokumen_urls).map(([key, val]) => {
-                  const url = typeof val === 'string' ? val : val?.url;
                   const label = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-                  if (!url) return null;
+                  const downloadUrl = `${API_BASE}/admin/pengajuan/${params.id}/dokumen/${encodeURIComponent(key)}`;
                   return (
                     <a
                       key={key}
-                      href={url}
+                      href={downloadUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"

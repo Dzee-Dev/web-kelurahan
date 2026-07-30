@@ -11,13 +11,6 @@ if (!fs.existsSync(UPLOAD_DIR)) {
   fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 }
 
-/**
- * Get the public URL for an uploaded file
- */
-function getFileUrl(relativePath) {
-  const baseUrl = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 3000}`;
-  return `${baseUrl}/uploads/${relativePath}`;
-}
 
 /**
  * Upload satu file ke local disk
@@ -40,8 +33,8 @@ async function uploadFile(file, folder) {
 
   return {
     path: relativePath,
-    url: getFileUrl(relativePath),
     originalName: file.originalname,
+    mimeType: file.mimetype,
   };
 }
 
@@ -74,7 +67,7 @@ async function uploadPdfBuffer(pdfBuffer, filePath) {
     }
 
     fs.writeFileSync(fullPath, pdfBuffer);
-    return getFileUrl(filePath);
+    return { path: filePath, mimeType: 'application/pdf' };
   } catch (err) {
     console.error('\u274C Gagal menyimpan PDF:', err.message);
     return null;

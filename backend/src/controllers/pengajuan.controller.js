@@ -1,5 +1,6 @@
 const pengajuanService = require('../services/pengajuan.service');
 const storageService = require('../services/storage.service');
+const documentAccess = require('../services/documentAccess.service');
 const { generatePengajuanPdf } = require('../services/pdf.service');
 const { sendMessage } = require('../services/waBot');
 const { buildWaMessage } = require('../utils/waMessageBuilder');
@@ -48,14 +49,15 @@ async function submitPengajuan(req, res, next) {
     try {
       const pdfBuffer = await generatePengajuanPdf(pengajuan);
       const pdfPath = `${jenis_surat}/bukti_pengajuan_${pengajuan.id}.pdf`;
-      pdfUrl = await storageService.uploadPdfBuffer(pdfBuffer, pdfPath);
+      const pdfFile = await storageService.uploadPdfBuffer(pdfBuffer, pdfPath);
 
-      if (pdfUrl) {
+      if (pdfFile) {
         dokumenUrls.pdf_bukti_pengajuan = {
-          url: pdfUrl,
+          ...pdfFile,
           originalName: `Bukti_Pengajuan_${jenis_surat.toUpperCase()}_${nik_pemohon}.pdf`,
         };
         await pengajuanService.updateDokumenUrls(pengajuan.id, dokumenUrls);
+        pdfUrl = documentAccess.buildReceiptUrl(pengajuan.id);
       }
     } catch (pdfErr) {
       console.error('\u26a0\ufe0f Gagal membuat PDF:', pdfErr.message);
@@ -106,7 +108,9 @@ async function getStatus(req, res, next) {
     const { id } = req.params;
     const pengajuan = await pengajuanService.getPengajuanById(id);
 
-    const pdfUrl = pengajuan.dokumen_urls?.pdf_bukti_pengajuan?.url || null;
+    const pdfUrl = pengajuan.dokumen_urls?.pdf_bukti_pengajuan
+      ? documentAccess.buildReceiptUrl(pengajuan.id)
+      : null;
 
     res.json({
       success: true,
@@ -118,7 +122,6 @@ async function getStatus(req, res, next) {
         status: pengajuan.status,
         created_at: pengajuan.created_at,
         pdf_url: pdfUrl,
-        dokumen_urls: pengajuan.dokumen_urls,
       },
     });
   } catch (error) {
@@ -137,7 +140,58 @@ async function getStatus(req, res, next) {
 async function getPengajuanDetail(req, res, next) {
   try {
     const pengajuan = await pengajuanService.getPengajuanById(req.params.id);
-    res.json({ success: true, data: pengajuan });
+    const dokumenManifest = Object.fromEntries(
+      Object.entries(pengajuan.dokumen_urls || {}).map(([field, fileData]) => [
+        field,
+        {
+          originalName: typeof fileData === 'object' ? fileData.originalName || field : field,
+          mimeType: typeof fileData === 'object' ? fileData.mimeType || null : null,
+        },
+      ])
+    );
+
+    res.json({
+      success: true,
+      data: { ...pengajuan, dokumen_urls: dokumenManifest },
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function downloadAdminDocument(req, res, next) {
+  try {
+    const pengajuan = await pengajuanService.getPengajuanById(req.params.id);
+    const fileData = pengajuan.dokumen_urls?.[req.params.field];
+    if (!fileData) throw new AppError('Dokumen tidak ditemukan pada pengajuan ini', 404);
+
+    const filePath = await documentAccess.resolveStoredDocument(fileData);
+    const fileName = documentAccess.sanitizeDownloadName(fileData.originalName, req.params.field);
+    res.set('Cache-Control', 'private, no-store, max-age=0');
+    return res.download(filePath, fileName, (error) => {
+      if (error && !res.headersSent) next(error);
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function downloadReceipt(req, res, next) {
+  try {
+    if (!documentAccess.verifyReceiptAccess(req.params.id, req.query.expires, req.query.token)) {
+      throw new AppError('Tautan bukti tidak valid atau sudah kedaluwarsa', 403);
+    }
+
+    const pengajuan = await pengajuanService.getPengajuanById(req.params.id);
+    const fileData = pengajuan.dokumen_urls?.pdf_bukti_pengajuan;
+    if (!fileData) throw new AppError('Bukti pengajuan tidak ditemukan', 404);
+
+    const filePath = await documentAccess.resolveStoredDocument(fileData);
+    const fileName = documentAccess.sanitizeDownloadName(fileData.originalName, `Bukti_Pengajuan_${req.params.id}.pdf`);
+    res.set('Cache-Control', 'private, no-store, max-age=0');
+    return res.download(filePath, fileName, (error) => {
+      if (error && !res.headersSent) next(error);
+    });
   } catch (error) {
     next(error);
   }
@@ -194,4 +248,12 @@ async function updateStatusHandler(req, res, next) {
   }
 }
 
-module.exports = { submitPengajuan, getStatus, getPengajuanDetail, listPengajuan, updateStatusHandler };
+module.exports = {
+  submitPengajuan,
+  getStatus,
+  getPengajuanDetail,
+  downloadAdminDocument,
+  downloadReceipt,
+  listPengajuan,
+  updateStatusHandler,
+};

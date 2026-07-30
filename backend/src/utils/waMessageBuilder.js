@@ -52,28 +52,13 @@ function buildWaMessage(data) {
   }
 
   if (data.dokumen_urls && typeof data.dokumen_urls === 'object') {
+    const documentCount = Object.keys(data.dokumen_urls).length;
+    const frontendUrl = (process.env.FRONTEND_URL || 'https://web-kelurahan-blush.vercel.app').replace(/\/$/, '');
     lines.push('*-- DOKUMEN & BUKTI --*');
-    
-    if (data.dokumen_urls.pdf_bukti_pengajuan) {
-      const pdfUrl = typeof data.dokumen_urls.pdf_bukti_pengajuan === 'string'
-        ? data.dokumen_urls.pdf_bukti_pengajuan
-        : data.dokumen_urls.pdf_bukti_pengajuan.url;
-      lines.push(`*1. Tanda Terima (PDF):*`);
-      lines.push(`${pdfUrl}`);
-      lines.push('');
-    }
-
-    let docIndex = 2;
-    const entries = Object.entries(data.dokumen_urls);
-    for (const [fieldName, fileData] of entries) {
-      if (fieldName === 'pdf_bukti_pengajuan') continue;
-      const label = fieldName.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
-      const url = typeof fileData === 'string' ? fileData : fileData.url;
-      lines.push(`*${docIndex}. ${label}:*`);
-      lines.push(`${url}`);
-      lines.push('');
-      docIndex++;
-    }
+    lines.push(`*${documentCount} dokumen* tersimpan secara privat.`);
+    lines.push('Petugas dapat membuka dan mengunduhnya setelah login melalui:');
+    lines.push(`${frontendUrl}/admin/dashboard/${data.id}`);
+    lines.push('');
   }
 
   lines.push('─────────────────────────────');

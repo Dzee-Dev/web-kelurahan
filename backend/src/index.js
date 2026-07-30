@@ -4,7 +4,6 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const path = require('path');
 
 const pengajuanRoutes = require('./routes/pengajuan.routes');
 const chatRoutes = require('./routes/chat.routes');
@@ -31,9 +30,6 @@ app.use(cors({
 // ─── Body Parsing ────────────────────────────────────────────
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// ─── Static Files (uploads) ──────────────────────────────────
-app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 // ─── Health Check ────────────────────────────────────────────
 app.get('/health', (req, res) => {
@@ -66,7 +62,6 @@ app.listen(PORT, () => {
   console.log(`   Server: http://localhost:${PORT}`);
   console.log(`   Env: ${process.env.NODE_ENV || 'development'}`);
   console.log(`   Health: http://localhost:${PORT}/health`);
-  console.log(`   Uploads: http://localhost:${PORT}/uploads/\n`);
 
   // Initialize WhatsApp Bot
   if (process.env.ENABLE_WA_BOT !== 'false') {

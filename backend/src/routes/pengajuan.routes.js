@@ -24,6 +24,9 @@ const uploadFields = upload.fields(buildUploadFields());
 // POST /api/pengajuan — Submit pengajuan (warga)
 router.post('/', uploadFields, validatePengajuan, pengajuanController.submitPengajuan);
 
+// GET /api/pengajuan/:id/bukti — Download bukti dengan tautan sementara
+router.get('/:id/bukti', pengajuanController.downloadReceipt);
+
 // GET /api/pengajuan/:id — Get status (warga tracking)
 router.get('/:id', pengajuanController.getStatus);
 
