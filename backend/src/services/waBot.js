@@ -127,8 +127,8 @@ function initWhatsAppBot() {
         textUpper.includes('SIANG') || textUpper.includes('SORE')
       ) {
         reply = inWorkHours
-          ? `👋 *Selamat Datang di Pelayanan Kelurahan Mesjid Priyayi*\n\nAda yang bisa kami bantu? Untuk mengajukan surat kependudukan secara online (SKTM, Surat Domisili, Surat Kematian), silakan kunjungi portal resmi kami:\n🌐 https://web-kelurahan.vercel.app\n\n📌 *Jam Pelayanan Kantor:* Senin – Jumat (08.00 – 15.00 WIB)`
-          : `👋 *Selamat Datang di Pelayanan Kelurahan Mesjid Priyayi*\n\nMohon maaf, saat ini kantor sedang *di luar jam operasional*. Pesan Anda akan dibaca oleh petugas pada hari kerja berikutnya.\n\nAnda tetap dapat membuat pengajuan surat online 24 jam melalui portal resmi kami:\n🌐 https://web-kelurahan.vercel.app\n\n📌 *Jam Pelayanan Kantor:* Senin – Jumat (08.00 – 15.00 WIB)`;
+          ? `👋 *Selamat Datang di Pelayanan Kelurahan Mesjid Priyayi*\n\nAda yang bisa kami bantu? Untuk mengajukan surat kependudukan secara online (SKTM, Surat Domisili, Surat Kematian), silakan kunjungi portal resmi kami:\n🌐 https://web-kelurahan-blush.vercel.app/\n\n📌 *Jam Pelayanan Kantor:* Senin – Jumat (08.00 – 15.00 WIB)`
+          : `👋 *Selamat Datang di Pelayanan Kelurahan Mesjid Priyayi*\n\nMohon maaf, saat ini kantor sedang *di luar jam operasional*. Pesan Anda akan dibaca oleh petugas pada hari kerja berikutnya.\n\nAnda tetap dapat membuat pengajuan surat online 24 jam melalui portal resmi kami:\n🌐 https://web-kelurahan-blush.vercel.app/\n\n📌 *Jam Pelayanan Kantor:* Senin – Jumat (08.00 – 15.00 WIB)`;
       }
 
       if (reply) {
