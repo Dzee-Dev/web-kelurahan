@@ -179,6 +179,37 @@ async function sendMessage(to, message) {
 }
 
 /**
+ * Kirim file privat sebagai attachment WhatsApp.
+ */
+async function sendMediaFile(to, filePath, options = {}) {
+  if (!client || !isReady) {
+    console.warn('⚠️ WhatsApp Bot belum ready, attachment tidak terkirim');
+    return null;
+  }
+
+  const resolvedPath = path.resolve(filePath);
+  if (!fs.existsSync(resolvedPath)) {
+    console.error(`❌ Attachment tidak ditemukan: ${resolvedPath}`);
+    return null;
+  }
+
+  try {
+    const loadedMedia = MessageMedia.fromFilePath(resolvedPath);
+    const media = options.filename
+      ? new MessageMedia(loadedMedia.mimetype, loadedMedia.data, options.filename, loadedMedia.filesize)
+      : loadedMedia;
+    const chatId = to.includes('@c.us') ? to : `${to}@c.us`;
+    const result = await client.sendMessage(chatId, media, {
+      caption: options.caption || '',
+    });
+    console.log(`✅ Attachment "${options.filename || path.basename(resolvedPath)}" terkirim ke ${to}`);
+    return result;
+  } catch (error) {
+    console.error(`❌ Gagal kirim attachment ke ${to}:`, error.message);
+    return null;
+  }
+}
+/**
  * Get bot status (untuk API/Admin Dashboard)
  */
 function getBotStatus() {
@@ -189,4 +220,4 @@ function getBotStatus() {
   };
 }
 
-module.exports = { initWhatsAppBot, sendMessage, getBotStatus };
+module.exports = { initWhatsAppBot, sendMessage, sendMediaFile, getBotStatus };

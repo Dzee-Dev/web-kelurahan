@@ -2,11 +2,33 @@ const pengajuanService = require('../services/pengajuan.service');
 const storageService = require('../services/storage.service');
 const documentAccess = require('../services/documentAccess.service');
 const { generatePengajuanPdf } = require('../services/pdf.service');
-const { sendMessage } = require('../services/waBot');
+const { sendMessage, sendMediaFile } = require('../services/waBot');
 const { buildWaMessage } = require('../utils/waMessageBuilder');
 const { LABEL_JENIS_SURAT } = require('../config/constants');
 const { AppError } = require('../middleware/errorHandler');
 
+async function sendAdminNotificationPackage(adminPhone, waMessage, pengajuan) {
+  await sendMessage(adminPhone, waMessage);
+
+  const entries = Object.entries(pengajuan.dokumen_urls || {});
+  let sentCount = 0;
+  for (const [field, fileData] of entries) {
+    try {
+      const filePath = await documentAccess.resolveStoredDocument(fileData);
+      const label = field.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
+      const filename = documentAccess.sanitizeDownloadName(fileData.originalName, field);
+      const result = await sendMediaFile(adminPhone, filePath, {
+        filename,
+        caption: `Dokumen: ${label}\nKode Tracking: ${pengajuan.id}`,
+      });
+      if (result) sentCount += 1;
+    } catch (error) {
+      console.error(`⚠️ Gagal menyiapkan attachment "${field}":`, error.message);
+    }
+  }
+
+  console.log(`📎 ${sentCount}/${entries.length} attachment pengajuan ${pengajuan.id} berhasil dikirim`);
+}
 /**
  * POST /api/pengajuan
  * Submit pengajuan surat baru (warga-facing)
@@ -72,9 +94,9 @@ async function submitPengajuan(req, res, next) {
     
     const waMessage = buildWaMessage(pengajuan);
     
-    // Bot mengirim pesan langsung ke admin
-    sendMessage(adminPhone, waMessage).catch(err => {
-      console.error('Gagal mengirim pesan bot:', err.message);
+    // Bot mengirim rekap lalu seluruh dokumen privat langsung ke admin.
+    sendAdminNotificationPackage(adminPhone, waMessage, pengajuan).catch((error) => {
+      console.error('Gagal mengirim paket notifikasi admin:', error.message);
     });
 
     // 6. Build WA deep link (pesan lengkap dengan seluruh tautan download PDF & foto dokumen)
