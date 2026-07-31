@@ -1,160 +1,226 @@
-'use client';
+import Image from 'next/image';
+import { Building2, UserRound } from 'lucide-react';
 
-/* ── SVG Person Silhouette Avatar ── */
-function PersonAvatar({ size = 64, className = '' }) {
+const pimpinan = {
+  jabatan: 'Kepala Kelurahan',
+  nama: 'H. Syarif, S.IP., M.Si.',
+  foto: '/struktur/portraits/h-syarif.png',
+};
+
+const sekretaris = {
+  jabatan: 'Sekretaris Kelurahan',
+  nama: 'Sety Puruhito, SE.',
+  foto: '/struktur/portraits/sety-puruhito.png',
+};
+
+const bidang = [
+  {
+    jabatan: 'Kasi PMK',
+    nama: 'Dedeh Rochmaedah, S.Kep., MM.',
+    foto: '/struktur/portraits/dedeh-rochmaedah.png',
+    aksen: 'emerald',
+    operator: {
+      jabatan: 'Operator',
+      nama: 'Bahrani',
+      foto: '/struktur/portraits/bahrani.png',
+    },
+  },
+  {
+    jabatan: 'Kasi Trantib',
+    nama: 'Salman Al Farishi, ST.',
+    foto: '/struktur/portraits/salman-al-farishi.png',
+    aksen: 'blue',
+    operator: {
+      jabatan: 'Operator',
+      nama: 'Ulfah',
+      foto: '/struktur/portraits/ulfah.png',
+    },
+  },
+  {
+    jabatan: 'Kasi Pem',
+    nama: 'Belum terisi',
+    foto: null,
+    aksen: 'violet',
+    operator: {
+      jabatan: 'Operator',
+      nama: 'Fikri FA',
+      foto: '/struktur/portraits/fikri-fa.png',
+    },
+  },
+  {
+    jabatan: 'Pranata Kewilayahan',
+    nama: 'Esti Hestiyanti',
+    foto: null,
+    aksen: 'amber',
+    operator: null,
+  },
+];
+
+const tema = {
+  emerald: {
+    ring: 'ring-emerald-200',
+    badge: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    glow: 'from-emerald-100/90 to-teal-50/20',
+    line: 'bg-emerald-300',
+  },
+  blue: {
+    ring: 'ring-blue-200',
+    badge: 'bg-blue-50 text-blue-700 border-blue-200',
+    glow: 'from-blue-100/90 to-cyan-50/20',
+    line: 'bg-blue-300',
+  },
+  violet: {
+    ring: 'ring-violet-200',
+    badge: 'bg-violet-50 text-violet-700 border-violet-200',
+    glow: 'from-violet-100/90 to-fuchsia-50/20',
+    line: 'bg-violet-300',
+  },
+  amber: {
+    ring: 'ring-amber-200',
+    badge: 'bg-amber-50 text-amber-700 border-amber-200',
+    glow: 'from-amber-100/90 to-orange-50/20',
+    line: 'bg-amber-300',
+  },
+};
+
+function Siluet({ compact = false }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" className={className}>
-      <circle cx="32" cy="32" r="31" fill="#f3f4f6" stroke="#e5e7eb" strokeWidth="1.5" />
-      {/* Head */}
-      <circle cx="32" cy="24" r="9" fill="#9ca3af" />
-      {/* Shoulders/Body */}
-      <path d="M14 52c0-10 8-16 18-16s18 6 18 16" fill="#9ca3af" />
-    </svg>
+    <div
+      className={`flex items-center justify-center rounded-full border border-dashed border-slate-300 bg-slate-50/70 text-slate-400 ${compact ? 'h-24 w-24' : 'h-36 w-36'}`}
+      aria-label="Foto belum tersedia"
+    >
+      <UserRound className={compact ? 'h-12 w-12' : 'h-20 w-20'} strokeWidth={1.2} />
+    </div>
   );
 }
 
-function PersonAvatarAccent({ size = 64, accentColor = '#1e3a5f', bgColor = '#eef4fb' }) {
+function FotoPejabat({ orang, compact = false, utama = false }) {
+  const ukuran = compact ? 'h-28 w-28' : utama ? 'h-52 w-52' : 'h-40 w-40';
+
+  if (!orang.foto) {
+    return <Siluet compact={compact} />;
+  }
+
   return (
-    <svg width={size} height={size} viewBox="0 0 64 64" fill="none">
-      <circle cx="32" cy="32" r="31" fill={bgColor} stroke={accentColor} strokeWidth="2" />
-      <circle cx="32" cy="24" r="9" fill={accentColor} opacity="0.7" />
-      <path d="M14 52c0-10 8-16 18-16s18 6 18 16" fill={accentColor} opacity="0.7" />
-    </svg>
+    <div className={`relative ${ukuran}`}>
+      <Image
+        src={orang.foto}
+        alt={`Foto ${orang.nama}`}
+        fill
+        sizes={compact ? '112px' : utama ? '208px' : '160px'}
+        className="object-contain object-bottom drop-shadow-[0_14px_18px_rgba(15,23,42,0.16)]"
+      />
+    </div>
+  );
+}
+
+function KartuUtama({ orang, jenis }) {
+  const isLurah = jenis === 'lurah';
+
+  return (
+    <article className={`relative overflow-hidden rounded-3xl border bg-white text-center shadow-[0_18px_50px_rgba(15,23,42,0.08)] ${isLurah ? 'w-full max-w-md border-amber-200' : 'w-full max-w-sm border-blue-200'}`}>
+      <div className={`absolute inset-x-0 top-0 h-32 bg-gradient-to-b ${isLurah ? 'from-amber-100/80' : 'from-blue-100/80'} to-transparent`} />
+      <div className="relative flex flex-col items-center px-6 pt-6">
+        <FotoPejabat orang={orang} utama={isLurah} />
+      </div>
+      <div className="relative border-t border-slate-100 px-6 py-5">
+        <span className={`inline-flex rounded-full border px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] ${isLurah ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-blue-200 bg-blue-50 text-blue-700'}`}>
+          {orang.jabatan}
+        </span>
+        <h3 className="mt-3 text-lg font-extrabold tracking-tight text-slate-900">{orang.nama}</h3>
+      </div>
+    </article>
+  );
+}
+
+function KartuBidang({ data }) {
+  const warna = tema[data.aksen];
+
+  return (
+    <div className="flex h-full flex-col items-center">
+      <article className="relative flex w-full flex-1 flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_14px_40px_rgba(15,23,42,0.07)] transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(15,23,42,0.11)]">
+        <div className={`absolute inset-x-0 top-0 h-28 bg-gradient-to-b ${warna.glow}`} />
+        <div className="relative flex min-h-48 items-end justify-center px-4 pt-5">
+          <div className={`rounded-full ring-4 ${warna.ring} ring-offset-4 ring-offset-white`}>
+            <FotoPejabat orang={data} />
+          </div>
+        </div>
+        <div className="relative mt-5 flex flex-1 flex-col items-center border-t border-slate-100 px-4 py-5 text-center">
+          <span className={`inline-flex rounded-full border px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] ${warna.badge}`}>
+            {data.jabatan}
+          </span>
+          <h3 className={`mt-3 text-sm font-extrabold leading-snug ${data.foto ? 'text-slate-900' : 'italic text-slate-500'}`}>
+            {data.nama}
+          </h3>
+        </div>
+      </article>
+
+      {data.operator && (
+        <>
+          <div className={`h-7 w-px ${warna.line}`} />
+          <article className="w-full rounded-2xl border border-slate-200 bg-white px-3 py-4 shadow-sm">
+            <div className="flex flex-col items-center text-center">
+              <FotoPejabat orang={data.operator} compact />
+              <span className="mt-3 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">
+                {data.operator.jabatan}
+              </span>
+              <h4 className="mt-1 text-sm font-bold text-slate-800">{data.operator.nama}</h4>
+            </div>
+          </article>
+        </>
+      )}
+    </div>
   );
 }
 
 export default function StrukturOrganisasi() {
-  const lurah = { jabatan: 'Kepala Kelurahan', nama: 'H. SYARIF, S.Ip M.Si', nip: '197108112008011003' };
-  const sekretaris = {
-    jabatan: 'Sekretaris Kelurahan', nama: 'SETYO PURUHITO, SE', nip: '197512182014101001',
-    staff: [
-      { nama: 'FIKRI FAUZI', peran: 'Staff Pelaksana Umum' },
-      { nama: 'ULFAH', peran: 'Pramubakti' },
-    ],
-  };
-  const kasiList = [
-    {
-      jabatan: 'Kasi Pemerintahan', nama: 'RHIKE NURHAIDA, SE M.Si', nip: '198409062010012005',
-      pelaksana: { nama: 'BAHRANI', peran: 'Operator Lampid' },
-      color: '#15803d', bg: '#f0fdf4',
-    },
-    {
-      jabatan: 'Kasi Pemberdayaan Masyarakat', nama: 'DEDEH ROCHMAEDAH, S.Kep, MM', nip: '198101262008012005',
-      pelaksana: null,
-      color: '#1d4ed8', bg: '#eff6ff',
-    },
-    {
-      jabatan: 'Kasi Trantib & Linmas', nama: 'SALMAN AL FARISHI, ST', nip: '199504022019021004',
-      pelaksana: null,
-      color: '#b45309', bg: '#fffbeb',
-    },
-  ];
-
   return (
-    <section id="struktur" className="py-16 bg-white border-t border-gray-200 scroll-mt-20">
-      <div className="max-w-5xl mx-auto px-4">
-        
-        {/* Title */}
-        <div className="text-center mb-14">
+    <section id="struktur" className="relative overflow-hidden border-t border-slate-200 bg-slate-50 py-20 scroll-mt-20">
+      <div className="pointer-events-none absolute -left-24 top-32 h-72 w-72 rounded-full bg-emerald-100/50 blur-3xl" />
+      <div className="pointer-events-none absolute -right-24 bottom-24 h-80 w-80 rounded-full bg-blue-100/50 blur-3xl" />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="mx-auto mb-14 max-w-2xl text-center">
           <div className="section-label">Pemerintahan</div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          <div className="mt-3 flex items-center justify-center gap-2 text-slate-400">
+            <span className="h-px w-10 bg-slate-300" />
+            <Building2 className="h-5 w-5" />
+            <span className="h-px w-10 bg-slate-300" />
+          </div>
+          <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
             Struktur Organisasi
           </h2>
-          <p className="mt-2 text-gray-500 text-sm max-w-lg mx-auto">
-            Susunan pejabat dan aparatur Kelurahan Mesjid Priyayi, Kecamatan Kasemen, Kota Serang.
+          <p className="mt-3 text-sm leading-6 text-slate-600 sm:text-base">
+            Susunan aparatur Kelurahan Mesjid Priyayi, Kecamatan Kasemen, Kota Serang.
           </p>
         </div>
 
-        {/* Org Chart */}
         <div className="flex flex-col items-center">
-          
-          {/* ── LURAH ── */}
-          <div className="card border-2 border-amber-400 px-8 py-6 text-center w-full max-w-sm">
-            <div className="flex justify-center mb-3">
-              <PersonAvatarAccent size={72} accentColor="#b45309" bgColor="#fef3c7" />
-            </div>
-            <div className="text-xs font-semibold text-amber-700 mb-1">{lurah.jabatan}</div>
-            <div className="text-lg font-bold text-gray-900">{lurah.nama}</div>
-            <div className="text-xs text-gray-400 font-mono mt-1">NIP. {lurah.nip}</div>
-          </div>
+          <KartuUtama orang={pimpinan} jenis="lurah" />
+          <div className="h-10 w-px bg-gradient-to-b from-amber-300 to-blue-300" />
+          <KartuUtama orang={sekretaris} jenis="sekretaris" />
 
-          {/* Connector */}
-          <div className="w-px h-10 bg-gray-300" />
-
-          {/* ── SEKRETARIS ── */}
-          <div className="card border-2 border-blue-400 px-8 py-6 text-center w-full max-w-md">
-            <div className="flex justify-center mb-3">
-              <PersonAvatarAccent size={64} accentColor="#1d4ed8" bgColor="#dbeafe" />
-            </div>
-            <div className="text-xs font-semibold text-blue-700 mb-1">{sekretaris.jabatan}</div>
-            <div className="text-base font-bold text-gray-900">{sekretaris.nama}</div>
-            <div className="text-xs text-gray-400 font-mono mt-1">NIP. {sekretaris.nip}</div>
-            
-            {/* Staff */}
-            <div className="mt-4 pt-4 border-t border-gray-100">
-              <div className="text-xs text-gray-400 mb-2.5">Pelaksana</div>
-              <div className="flex flex-wrap justify-center gap-3">
-                {sekretaris.staff.map((s, i) => (
-                  <div key={i} className="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2">
-                    <PersonAvatar size={28} />
-                    <div className="text-left">
-                      <div className="text-xs font-semibold text-gray-800">{s.nama}</div>
-                      <div className="text-[11px] text-gray-500">{s.peran}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Connector to branches */}
-          <div className="w-px h-8 bg-gray-300" />
-          
-          {/* Horizontal line for desktop */}
-          <div className="hidden md:block relative w-full max-w-4xl">
-            <div className="border-t-2 border-gray-200 mx-auto" style={{ width: '66%' }} />
-            <div className="flex justify-between mx-auto" style={{ width: '66%' }}>
-              <div className="w-px h-8 bg-gray-200" />
-              <div className="w-px h-8 bg-gray-200" />
-              <div className="w-px h-8 bg-gray-200" />
-            </div>
-          </div>
-
-          {/* ── 3 KASI ── */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 w-full">
-            {kasiList.map((kasi, idx) => (
-              <div key={idx} className="flex flex-col items-center">
-                {/* Mobile connector */}
-                <div className="md:hidden w-px h-6 bg-gray-200 mb-0" />
-                
-                <div className="card px-5 py-5 text-center w-full hover:border-gray-300">
-                  <div className="flex justify-center mb-3">
-                    <PersonAvatarAccent size={56} accentColor={kasi.color} bgColor={kasi.bg} />
-                  </div>
-                  <div className="text-xs font-semibold mb-1" style={{ color: kasi.color }}>{kasi.jabatan}</div>
-                  <div className="text-sm font-bold text-gray-900">{kasi.nama}</div>
-                  <div className="text-xs text-gray-400 font-mono mt-1">NIP. {kasi.nip}</div>
-                  
-                  <div className="mt-3 pt-3 border-t border-gray-100">
-                    <div className="text-xs text-gray-400 mb-1.5">Pelaksana</div>
-                    {kasi.pelaksana ? (
-                      <div className="flex items-center justify-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 inline-flex">
-                        <PersonAvatar size={24} />
-                        <div className="text-left">
-                          <div className="text-xs font-semibold text-gray-800">{kasi.pelaksana.nama}</div>
-                          <div className="text-[11px] text-gray-500">{kasi.pelaksana.peran}</div>
-                        </div>
-                      </div>
-                    ) : (
-                      <span className="text-xs text-gray-400 italic">Belum terisi</span>
-                    )}
-                  </div>
-                </div>
-              </div>
+          <div className="h-10 w-px bg-slate-300" />
+          <div className="hidden w-[76%] border-t-2 border-slate-200 lg:block" />
+          <div className="hidden w-[76%] grid-cols-4 lg:grid">
+            {bidang.map((item) => (
+              <div key={item.jabatan} className="mx-auto h-8 w-px bg-slate-200" />
             ))}
           </div>
 
+          <div className="grid w-full grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+            {bidang.map((item) => (
+              <div key={item.jabatan} className="relative">
+                <div className="mx-auto h-7 w-px bg-slate-200 lg:hidden" />
+                <KartuBidang data={item} />
+              </div>
+            ))}
+          </div>
         </div>
+
+        <p className="mt-10 text-center text-xs text-slate-400">
+          Siluet menandai posisi yang fotonya belum tersedia atau jabatannya belum terisi.
+        </p>
       </div>
     </section>
   );
