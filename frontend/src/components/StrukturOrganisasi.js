@@ -1,24 +1,24 @@
 import Image from 'next/image';
-import { Building2, UserRound } from 'lucide-react';
+import { Building2, UserRound, UsersRound } from 'lucide-react';
 
-const pimpinan = {
+const kepalaKelurahan = {
   jabatan: 'Kepala Kelurahan',
   nama: 'H. Syarif, S.IP., M.Si.',
   foto: '/struktur/portraits/h-syarif.png',
 };
 
-const sekretaris = {
+const sekretarisKelurahan = {
   jabatan: 'Sekretaris Kelurahan',
   nama: 'Sety Puruhito, SE.',
   foto: '/struktur/portraits/sety-puruhito.png',
 };
 
-const bidang = [
+const unitKerja = [
   {
     jabatan: 'Kasi PMK',
     nama: 'Dedeh Rochmaedah, S.Kep., MM.',
     foto: '/struktur/portraits/dedeh-rochmaedah.png',
-    aksen: 'emerald',
+    warna: 'emerald',
     operator: {
       jabatan: 'Operator',
       nama: 'Bahrani',
@@ -29,7 +29,7 @@ const bidang = [
     jabatan: 'Kasi Trantib',
     nama: 'Salman Al Farishi, ST.',
     foto: '/struktur/portraits/salman-al-farishi.png',
-    aksen: 'blue',
+    warna: 'blue',
     operator: {
       jabatan: 'Operator',
       nama: 'Ulfah',
@@ -40,7 +40,7 @@ const bidang = [
     jabatan: 'Kasi Pem',
     nama: 'Belum terisi',
     foto: null,
-    aksen: 'violet',
+    warna: 'violet',
     operator: {
       jabatan: 'Operator',
       nama: 'Fikri FA',
@@ -51,122 +51,140 @@ const bidang = [
     jabatan: 'Pranata Kewilayahan',
     nama: 'Esti Hestiyanti',
     foto: null,
-    aksen: 'amber',
+    warna: 'amber',
     operator: null,
   },
 ];
 
 const tema = {
   emerald: {
-    ring: 'ring-emerald-200',
-    badge: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    glow: 'from-emerald-100/90 to-teal-50/20',
-    line: 'bg-emerald-300',
+    bar: 'bg-emerald-600',
+    label: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+    portrait: 'border-emerald-200 bg-emerald-50',
+    connector: 'bg-emerald-300',
   },
   blue: {
-    ring: 'ring-blue-200',
-    badge: 'bg-blue-50 text-blue-700 border-blue-200',
-    glow: 'from-blue-100/90 to-cyan-50/20',
-    line: 'bg-blue-300',
+    bar: 'bg-blue-600',
+    label: 'border-blue-200 bg-blue-50 text-blue-700',
+    portrait: 'border-blue-200 bg-blue-50',
+    connector: 'bg-blue-300',
   },
   violet: {
-    ring: 'ring-violet-200',
-    badge: 'bg-violet-50 text-violet-700 border-violet-200',
-    glow: 'from-violet-100/90 to-fuchsia-50/20',
-    line: 'bg-violet-300',
+    bar: 'bg-violet-600',
+    label: 'border-violet-200 bg-violet-50 text-violet-700',
+    portrait: 'border-violet-200 bg-violet-50',
+    connector: 'bg-violet-300',
   },
   amber: {
-    ring: 'ring-amber-200',
-    badge: 'bg-amber-50 text-amber-700 border-amber-200',
-    glow: 'from-amber-100/90 to-orange-50/20',
-    line: 'bg-amber-300',
+    bar: 'bg-amber-500',
+    label: 'border-amber-200 bg-amber-50 text-amber-700',
+    portrait: 'border-amber-200 bg-amber-50',
+    connector: 'bg-amber-300',
   },
 };
 
-function Siluet({ compact = false }) {
+function Siluet({ kecil = false }) {
   return (
-    <div
-      className={`flex items-center justify-center rounded-full border border-dashed border-slate-300 bg-slate-50/70 text-slate-400 ${compact ? 'h-24 w-24' : 'h-36 w-36'}`}
-      aria-label="Foto belum tersedia"
-    >
-      <UserRound className={compact ? 'h-12 w-12' : 'h-20 w-20'} strokeWidth={1.2} />
+    <div className={`flex h-full w-full items-center justify-center text-slate-400 ${kecil ? 'bg-slate-50' : 'bg-gradient-to-b from-slate-50 to-slate-100'}`}>
+      <UserRound className={kecil ? 'h-9 w-9' : 'h-16 w-16'} strokeWidth={1.25} aria-hidden="true" />
+      <span className="sr-only">Foto belum tersedia</span>
     </div>
   );
 }
 
-function FotoPejabat({ orang, compact = false, utama = false }) {
-  const ukuran = compact ? 'h-28 w-28' : utama ? 'h-52 w-52' : 'h-40 w-40';
-
-  if (!orang.foto) {
-    return <Siluet compact={compact} />;
-  }
+function Potret({ orang, ukuran = 'normal', className = '' }) {
+  const dimensi = ukuran === 'besar' ? 'h-40 w-36 sm:h-44 sm:w-40' : ukuran === 'kecil' ? 'h-20 w-20' : 'h-32 w-32';
 
   return (
-    <div className={`relative ${ukuran}`}>
-      <Image
-        src={orang.foto}
-        alt={`Foto ${orang.nama}`}
-        fill
-        sizes={compact ? '112px' : utama ? '208px' : '160px'}
-        className="object-contain object-bottom drop-shadow-[0_14px_18px_rgba(15,23,42,0.16)]"
-      />
+    <div className={`relative shrink-0 overflow-hidden ${dimensi} ${className}`}>
+      {orang.foto ? (
+        <Image
+          src={orang.foto}
+          alt={`Foto ${orang.nama}`}
+          fill
+          sizes={ukuran === 'besar' ? '(max-width: 640px) 144px, 160px' : ukuran === 'kecil' ? '80px' : '128px'}
+          className="object-cover object-top"
+        />
+      ) : (
+        <Siluet kecil={ukuran === 'kecil'} />
+      )}
     </div>
   );
 }
 
-function KartuUtama({ orang, jenis }) {
-  const isLurah = jenis === 'lurah';
-
+function KartuPimpinan({ orang, utama = false }) {
   return (
-    <article className={`relative overflow-hidden rounded-3xl border bg-white text-center shadow-[0_18px_50px_rgba(15,23,42,0.08)] ${isLurah ? 'w-full max-w-md border-amber-200' : 'w-full max-w-sm border-blue-200'}`}>
-      <div className={`absolute inset-x-0 top-0 h-32 bg-gradient-to-b ${isLurah ? 'from-amber-100/80' : 'from-blue-100/80'} to-transparent`} />
-      <div className="relative flex flex-col items-center px-6 pt-6">
-        <FotoPejabat orang={orang} utama={isLurah} />
-      </div>
-      <div className="relative border-t border-slate-100 px-6 py-5">
-        <span className={`inline-flex rounded-full border px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] ${isLurah ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-blue-200 bg-blue-50 text-blue-700'}`}>
-          {orang.jabatan}
-        </span>
-        <h3 className="mt-3 text-lg font-extrabold tracking-tight text-slate-900">{orang.nama}</h3>
+    <article className={`relative w-full overflow-hidden rounded-2xl border bg-white shadow-[0_12px_35px_rgba(15,23,42,0.08)] ${utama ? 'max-w-xl border-emerald-200' : 'max-w-lg border-slate-200'}`}>
+      <div className={`absolute inset-y-0 left-0 w-1.5 ${utama ? 'bg-emerald-600' : 'bg-slate-700'}`} />
+      <div className="flex min-h-44 items-stretch pl-1.5">
+        <Potret
+          orang={orang}
+          ukuran="besar"
+          className={utama ? 'bg-emerald-50' : 'bg-slate-100'}
+        />
+        <div className="flex min-w-0 flex-1 flex-col justify-center px-5 py-5 sm:px-7">
+          <div className="mb-3 flex items-center gap-2">
+            <span className={`h-2 w-2 rounded-full ${utama ? 'bg-emerald-500' : 'bg-slate-500'}`} />
+            <span className={`text-[10px] font-extrabold uppercase tracking-[0.18em] ${utama ? 'text-emerald-700' : 'text-slate-600'}`}>
+              {orang.jabatan}
+            </span>
+          </div>
+          <h3 className={`font-extrabold leading-tight tracking-tight text-slate-900 ${utama ? 'text-lg sm:text-xl' : 'text-base sm:text-lg'}`}>
+            {orang.nama}
+          </h3>
+          <p className="mt-2 text-xs leading-5 text-slate-500">Kelurahan Mesjid Priyayi</p>
+        </div>
       </div>
     </article>
   );
 }
 
-function KartuBidang({ data }) {
-  const warna = tema[data.aksen];
+function KartuJabatan({ unit }) {
+  const warna = tema[unit.warna];
 
   return (
-    <div className="flex h-full flex-col items-center">
-      <article className="relative flex w-full flex-1 flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_14px_40px_rgba(15,23,42,0.07)] transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(15,23,42,0.11)]">
-        <div className={`absolute inset-x-0 top-0 h-28 bg-gradient-to-b ${warna.glow}`} />
-        <div className="relative flex min-h-48 items-end justify-center px-4 pt-5">
-          <div className={`rounded-full ring-4 ${warna.ring} ring-offset-4 ring-offset-white`}>
-            <FotoPejabat orang={data} />
-          </div>
-        </div>
-        <div className="relative mt-5 flex flex-1 flex-col items-center border-t border-slate-100 px-4 py-5 text-center">
-          <span className={`inline-flex rounded-full border px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] ${warna.badge}`}>
-            {data.jabatan}
-          </span>
-          <h3 className={`mt-3 text-sm font-extrabold leading-snug ${data.foto ? 'text-slate-900' : 'italic text-slate-500'}`}>
-            {data.nama}
-          </h3>
-        </div>
-      </article>
+    <article className="relative h-72 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_10px_28px_rgba(15,23,42,0.06)] transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_16px_36px_rgba(15,23,42,0.10)]">
+      <div className={`h-1.5 w-full ${warna.bar}`} />
+      <div className="flex h-[calc(100%-6px)] flex-col items-center px-4 pb-5 pt-5 text-center">
+        <Potret orang={unit} className={`rounded-full border-4 ${warna.portrait}`} />
+        <span className={`mt-4 inline-flex rounded-full border px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.14em] ${warna.label}`}>
+          {unit.jabatan}
+        </span>
+        <h3 className={`mt-3 max-w-full text-sm font-bold leading-5 ${unit.foto ? 'text-slate-900' : 'italic text-slate-500'}`}>
+          {unit.nama}
+        </h3>
+      </div>
+    </article>
+  );
+}
 
-      {data.operator && (
+function KartuOperator({ operator, warna }) {
+  const gaya = tema[warna];
+
+  return (
+    <article className="flex min-h-28 items-center gap-3 rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_8px_22px_rgba(15,23,42,0.05)]">
+      <Potret orang={operator} ukuran="kecil" className={`rounded-xl border ${gaya.portrait}`} />
+      <div className="min-w-0 text-left">
+        <span className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-slate-400">
+          {operator.jabatan}
+        </span>
+        <h4 className="mt-1 truncate text-sm font-bold text-slate-800">{operator.nama}</h4>
+      </div>
+    </article>
+  );
+}
+
+function CabangOrganisasi({ unit }) {
+  const warna = tema[unit.warna];
+
+  return (
+    <div className="relative">
+      <div className="mx-auto h-7 w-px bg-slate-300 lg:hidden" />
+      <KartuJabatan unit={unit} />
+      {unit.operator && (
         <>
-          <div className={`h-7 w-px ${warna.line}`} />
-          <article className="w-full rounded-2xl border border-slate-200 bg-white px-3 py-4 shadow-sm">
-            <div className="flex flex-col items-center text-center">
-              <FotoPejabat orang={data.operator} compact />
-              <span className="mt-3 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">
-                {data.operator.jabatan}
-              </span>
-              <h4 className="mt-1 text-sm font-bold text-slate-800">{data.operator.nama}</h4>
-            </div>
-          </article>
+          <div className={`mx-auto h-6 w-px ${warna.connector}`} />
+          <KartuOperator operator={unit.operator} warna={unit.warna} />
         </>
       )}
     </div>
@@ -175,19 +193,14 @@ function KartuBidang({ data }) {
 
 export default function StrukturOrganisasi() {
   return (
-    <section id="struktur" className="relative overflow-hidden border-t border-slate-200 bg-slate-50 py-20 scroll-mt-20">
-      <div className="pointer-events-none absolute -left-24 top-32 h-72 w-72 rounded-full bg-emerald-100/50 blur-3xl" />
-      <div className="pointer-events-none absolute -right-24 bottom-24 h-80 w-80 rounded-full bg-blue-100/50 blur-3xl" />
-
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="mx-auto mb-14 max-w-2xl text-center">
-          <div className="section-label">Pemerintahan</div>
-          <div className="mt-3 flex items-center justify-center gap-2 text-slate-400">
-            <span className="h-px w-10 bg-slate-300" />
-            <Building2 className="h-5 w-5" />
-            <span className="h-px w-10 bg-slate-300" />
+    <section id="struktur" className="border-t border-slate-200 bg-[#f7f9fb] py-20 scroll-mt-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="mx-auto mb-12 max-w-2xl text-center">
+          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-200 bg-white shadow-sm">
+            <Image src="/logo.jpeg" alt="Logo Kota Serang" width={38} height={38} className="h-10 w-10 object-contain" />
           </div>
-          <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+          <div className="section-label">Pemerintahan</div>
+          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
             Struktur Organisasi
           </h2>
           <p className="mt-3 text-sm leading-6 text-slate-600 sm:text-base">
@@ -195,32 +208,36 @@ export default function StrukturOrganisasi() {
           </p>
         </div>
 
-        <div className="flex flex-col items-center">
-          <KartuUtama orang={pimpinan} jenis="lurah" />
-          <div className="h-10 w-px bg-gradient-to-b from-amber-300 to-blue-300" />
-          <KartuUtama orang={sekretaris} jenis="sekretaris" />
+        <div className="mx-auto flex max-w-6xl flex-col items-center">
+          <KartuPimpinan orang={kepalaKelurahan} utama />
+          <div className="h-8 w-px bg-emerald-300" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-400 shadow-sm">
+            <Building2 className="h-4 w-4" aria-hidden="true" />
+          </div>
+          <div className="h-8 w-px bg-slate-300" />
+          <KartuPimpinan orang={sekretarisKelurahan} />
 
           <div className="h-10 w-px bg-slate-300" />
-          <div className="hidden w-[76%] border-t-2 border-slate-200 lg:block" />
-          <div className="hidden w-[76%] grid-cols-4 lg:grid">
-            {bidang.map((item) => (
-              <div key={item.jabatan} className="mx-auto h-8 w-px bg-slate-200" />
+          <div className="hidden w-[75%] border-t-2 border-slate-200 lg:block" />
+          <div className="hidden w-[75%] grid-cols-4 lg:grid">
+            {unitKerja.map((unit) => (
+              <div key={unit.jabatan} className="mx-auto h-8 w-px bg-slate-200" />
             ))}
           </div>
 
-          <div className="grid w-full grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
-            {bidang.map((item) => (
-              <div key={item.jabatan} className="relative">
-                <div className="mx-auto h-7 w-px bg-slate-200 lg:hidden" />
-                <KartuBidang data={item} />
-              </div>
+          <div className="grid w-full grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-y-0">
+            {unitKerja.map((unit) => (
+              <CabangOrganisasi key={unit.jabatan} unit={unit} />
             ))}
+          </div>
+
+          <div className="mt-12 flex max-w-xl items-start gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-left shadow-sm">
+            <UsersRound className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" aria-hidden="true" />
+            <p className="text-xs leading-5 text-slate-500">
+              Siluet digunakan sementara untuk jabatan atau aparatur yang fotonya belum tersedia.
+            </p>
           </div>
         </div>
-
-        <p className="mt-10 text-center text-xs text-slate-400">
-          Siluet menandai posisi yang fotonya belum tersedia atau jabatannya belum terisi.
-        </p>
       </div>
     </section>
   );
