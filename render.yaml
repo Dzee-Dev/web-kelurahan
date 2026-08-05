@@ -17,5 +17,5 @@ services:
         value: rahasia_kelurahan_123
       - key: WABA_PHONE_NUMBER_ID
         value: 1170659459470823
-      - key: WABA_ADMIN_PHONE
-        value: 6285694083400
+      - key: WA_ADMIN_PHONE
+        value: 6285287434646

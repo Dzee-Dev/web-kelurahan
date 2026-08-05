@@ -88,7 +88,7 @@ async function submitPengajuan(req, res, next) {
     pengajuan.dokumen_urls = dokumenUrls;
 
     // 5. Kirim Recap Lengkap via Bot WA secara background
-    let adminPhone = process.env.WA_ADMIN_PHONE || '6285694083400';
+    let adminPhone = process.env.WA_ADMIN_PHONE || '6285287434646';
     adminPhone = adminPhone.replace(/[^0-9]/g, '');
     if (adminPhone.startsWith('0')) adminPhone = '62' + adminPhone.slice(1);
     
