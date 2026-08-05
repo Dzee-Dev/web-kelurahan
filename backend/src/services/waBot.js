@@ -16,8 +16,13 @@ let hasRequestedPairing = false;
  * Inisialisasi WhatsApp Bot Client
  */
 function initWhatsAppBot() {
+  const clientId = process.env.WA_BOT_CLIENT_ID || 'admin-6285287434646';
+
   client = new Client({
-    authStrategy: new LocalAuth({ dataPath: '.wwebjs_auth' }),
+    authStrategy: new LocalAuth({
+      clientId,
+      dataPath: '.wwebjs_auth',
+    }),
     webVersionCache: {
       type: 'remote',
       remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html',
