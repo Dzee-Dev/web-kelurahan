@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import QrModal from '@/components/QrModal';
-import { FileText, Home, UserCheck, Search, Menu, X, ChevronDown, Phone, MapPin, Mail, QrCode } from 'lucide-react';
+import { COMPLAINT_WHATSAPP_URL, ADMIN_WHATSAPP_DISPLAY } from '@/lib/contact';
+import { FileText, Home, UserCheck, Search, Menu, X, ChevronDown, Phone, MapPin, Mail, QrCode, MessageSquareWarning } from 'lucide-react';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -29,7 +30,7 @@ export default function Header() {
           </div>
           <a href="tel:+6285287434646" className="flex items-center gap-1.5 hover:text-white transition-colors">
             <Phone className="w-3.5 h-3.5" />
-            <span>0852-8743-4646</span>
+            <span>{ADMIN_WHATSAPP_DISPLAY}</span>
           </a>
         </div>
       </div>
@@ -58,6 +59,15 @@ export default function Header() {
             <Link href="/#struktur" className="px-3 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors">
               Struktur Organisasi
             </Link>
+            <a
+              href={COMPLAINT_WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-2 text-sm text-rose-700 hover:bg-rose-50 rounded-md transition-colors flex items-center gap-1.5 font-medium"
+            >
+              <MessageSquareWarning className="w-4 h-4" />
+              Pengaduan
+            </a>
             <button
               onClick={() => setQrModalOpen(true)}
               className="px-3 py-2 text-sm text-gray-700 hover:text-emerald-700 hover:bg-emerald-50 rounded-md transition-colors flex items-center gap-1.5 font-medium"
@@ -123,6 +133,16 @@ export default function Header() {
           <Link href="/#profil" onClick={() => setMobileMenuOpen(false)} className="block py-2.5 text-sm text-gray-700 hover:text-gray-900 font-medium">Profil</Link>
           <Link href="/#struktur" onClick={() => setMobileMenuOpen(false)} className="block py-2.5 text-sm text-gray-700 hover:text-gray-900 font-medium">Struktur Organisasi</Link>
           <Link href="/tracking" onClick={() => setMobileMenuOpen(false)} className="block py-2.5 text-sm text-gray-700 hover:text-gray-900 font-medium">Lacak Surat</Link>
+          <a
+            href={COMPLAINT_WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMobileMenuOpen(false)}
+            className="py-2.5 text-sm text-rose-700 font-semibold flex items-center gap-2"
+          >
+            <MessageSquareWarning className="w-4 h-4" />
+            <span>Pengaduan via WhatsApp</span>
+          </a>
           <button
             onClick={() => { setMobileMenuOpen(false); setQrModalOpen(true); }}
             className="w-full text-left py-2.5 text-sm text-emerald-700 font-semibold flex items-center gap-2"

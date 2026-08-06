@@ -6,9 +6,11 @@ import { useRouter } from 'next/navigation';
 import {
   FileText, Home, UserCheck, Search, ArrowRight,
   CheckCircle2, MessageCircle, AlertCircle, FileCheck, ChevronRight, Clock,
+  MessageSquareWarning,
 } from 'lucide-react';
 import ProfilKelurahan from '@/components/ProfilKelurahan';
 import StrukturOrganisasi from '@/components/StrukturOrganisasi';
+import { COMPLAINT_WHATSAPP_URL, ADMIN_WHATSAPP_DISPLAY } from '@/lib/contact';
 
 export default function LandingPage() {
   const router = useRouter();
@@ -176,7 +178,33 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── PROFIL ── */}
+      {/* PENGADUAN MASYARAKAT */}
+      <section id="pengaduan" className="max-w-6xl mx-auto px-4 pb-6">
+        <div className="bg-rose-50 border border-rose-200 rounded-xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center shrink-0">
+              <MessageSquareWarning className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="font-bold text-gray-900">Layanan Pengaduan Masyarakat</h2>
+              <p className="text-sm text-gray-600 mt-1">
+                Sampaikan pengaduan Anda melalui WhatsApp resmi Kelurahan Mesjid Priyayi di {ADMIN_WHATSAPP_DISPLAY}.
+              </p>
+            </div>
+          </div>
+          <a
+            href={COMPLAINT_WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-whatsapp px-5 py-3 text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap"
+          >
+            <MessageCircle className="w-4 h-4" />
+            Buat Pengaduan
+          </a>
+        </div>
+      </section>
+
+      {/* PROFIL KELURAHAN */}
       <ProfilKelurahan />
 
       {/* ── STRUKTUR ORGANISASI ── */}

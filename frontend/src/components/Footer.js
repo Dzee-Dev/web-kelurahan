@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { Phone, Mail, Clock, MapPin } from 'lucide-react';
+import { Phone, Mail, Clock, MapPin, MessageSquareWarning } from 'lucide-react';
+import { ADMIN_WHATSAPP_DISPLAY, COMPLAINT_WHATSAPP_URL } from '@/lib/contact';
 
 export default function Footer() {
   return (
@@ -56,7 +57,13 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-gray-500 shrink-0" />
-                <span>0852-8743-4646</span>
+                <span>{ADMIN_WHATSAPP_DISPLAY}</span>
+              </li>
+              <li>
+                <a href={COMPLAINT_WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-rose-300 hover:text-white transition-colors">
+                  <MessageSquareWarning className="w-4 h-4 shrink-0" />
+                  <span>Kirim Pengaduan via WhatsApp</span>
+                </a>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-gray-500 shrink-0" />
